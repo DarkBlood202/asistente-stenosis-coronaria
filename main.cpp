@@ -1,12 +1,35 @@
+/*el codigo no funciona momentaneamente por un conflicto con el puntero y el fstream*/
+
 #include<iostream>
 #include<string.h>
+#include<fstream>
+#include<exception>
 using namespace std;
 
+//puntero hacia la ubicacion y nombre del archivo
+char ubicacion_registro[] = "data.txt";
+char* a_ubicacion_registro = &ubicacion_registro;
+
+//estructura usuario
 struct Usuario{
     string nombre;
     char sexo[10];
     int edad;
 };
+
+//guardas datos al archivo
+void guardar_datos(Usuario user, int i){
+    ofstream registro;
+     registro.open(*a_ubicacion_registro,ios::out);
+    if(registro.fail()){
+        cout << "\n\nHubo un error al tratar de abrir el arhivo de datos.";
+        throw exception();      
+    }
+    
+    registro << &user[i].nombre << "\n" << &user[i].sexo << "\n" << &user[i].edad;
+    
+    cout << "\n\nDatos guardados!\n\n";
+}
 
 int main(int argc, char** argv){
     
@@ -15,7 +38,8 @@ int main(int argc, char** argv){
     
     cout << "Bienvenid@ a su sistema de asistencia en salud." << "\n\nVeo que es un usuario nuevo. Por favor, cuentame un poco sobre ti." << endl;
     
-    while(!confirmar_datos){
+     //si datos no son correctos, se sigue preguntando por ellos
+     while(!confirmar_datos){
     
         cout <<"\nTu nombre, por favor: ";
         getline(cin,usuarios[0].nombre);
@@ -25,9 +49,10 @@ int main(int argc, char** argv){
         cout << "Y dime, " << usuarios[0].nombre << ", tu eres del sexo : ";
         cin.getline(usuarios[0].sexo,10,'\n');
         
-        cout << "Ya veo. Excelente. Eres del sexo " << strlwr(usuarios[0].sexo) << ".\n\n";
+        cout << "Ya veo. Excelente. Eres del sexo " << /*strlwr(*/usuarios[0].sexo/*)*/ << ".\n\n";
 
         cout << "Por ultimo, " << usuarios[0].nombre << " , cual es tu edad: ";
+        //validacion de numero entero
         while(!(cin >> usuarios[0].edad)){
         	cin.clear();
         	cin.ignore(100,'\n');
@@ -40,7 +65,8 @@ int main(int argc, char** argv){
         cout << "Ok. Recapitulemos, te parece?\nEres " << usuarios[0].nombre;
 		cout << ", del sexo " << usuarios[0].sexo << " y con " << usuarios[0].edad << " abriles.";
 		
-		fflush(stdin);
+		//limpiar el buffer
+  fflush(stdin);
 		bool validez_respuesta=false;
 		string respuesta_sn;
 		
