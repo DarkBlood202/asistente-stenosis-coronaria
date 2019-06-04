@@ -6,9 +6,9 @@
 #include<exception>
 using namespace std;
 
-//puntero hacia la ubicacion y nombre del archivo
-char ubicacion_registro[] = "data.txt";
-char* a_ubicacion_registro = &ubicacion_registro;
+/*//puntero hacia la ubicacion y nombre del archivo
+string ubicacion_registro = "data.txt";
+string *a_ubicacion= &ubicacion_registro;*/
 
 //estructura usuario
 struct Usuario{
@@ -18,15 +18,15 @@ struct Usuario{
 };
 
 //guardas datos al archivo
-void guardar_datos(Usuario user, int i){
+void guardar_datos(Usuario user){
     ofstream registro;
-     registro.open(*a_ubicacion_registro,ios::out);
+     registro.open("data.txt",ios::out);
     if(registro.fail()){
         cout << "\n\nHubo un error al tratar de abrir el arhivo de datos.";
         throw exception();      
     }
     
-    registro << &user[i].nombre << "\n" << &user[i].sexo << "\n" << &user[i].edad;
+    registro << &user.nombre << "\n" << &user.sexo << "\n" << &user.edad;
     
     cout << "\n\nDatos guardados!\n\n";
 }
@@ -79,7 +79,8 @@ int main(int argc, char** argv){
 			}
 			else if(respuesta_sn == "S" || respuesta_sn == "s"){
 				cout << "\nEsplendido. Entonces comencemos.\n";
-				validez_respuesta=true;
+				guardar_datos(usuarios[0]);
+    validez_respuesta=true;
 				confirmar_datos=true;
 			}
 		}
