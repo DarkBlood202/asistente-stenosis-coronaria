@@ -1,5 +1,3 @@
-/*el codigo no funciona momentaneamente por un conflicto con el puntero y el fstream*/
-
 #include<iostream>
 #include<string.h>
 #include<fstream>
@@ -17,7 +15,7 @@ struct Usuario{
     int edad;
 };
 
-//guardas datos al archivo
+//guardar datos al archivo
 void guardar_datos(Usuario user){
     ofstream registro;
      registro.open("data.txt",ios::out);
@@ -26,7 +24,7 @@ void guardar_datos(Usuario user){
         throw exception();      
     }
     
-    registro << &user.nombre << "\n" << &user.sexo << "\n" << &user.edad;
+    registro << user.nombre << "\n" << user.sexo << "\n" << user.edad << "\n";
     
     cout << "\n\nDatos guardados!\n\n";
 }
@@ -66,7 +64,8 @@ int main(int argc, char** argv){
 		cout << ", del sexo " << usuarios[0].sexo << " y con " << usuarios[0].edad << " abriles.";
 		
 		//limpiar el buffer
-  fflush(stdin);
+  		fflush(stdin);
+  		
 		bool validez_respuesta=false;
 		string respuesta_sn;
 		
@@ -80,7 +79,7 @@ int main(int argc, char** argv){
 			else if(respuesta_sn == "S" || respuesta_sn == "s"){
 				cout << "\nEsplendido. Entonces comencemos.\n";
 				guardar_datos(usuarios[0]);
-    validez_respuesta=true;
+    			validez_respuesta=true;
 				confirmar_datos=true;
 			}
 		}
