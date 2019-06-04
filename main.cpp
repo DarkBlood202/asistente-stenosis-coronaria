@@ -4,7 +4,7 @@ using namespace std;
 
 struct Usuario{
     string nombre;
-    string sexo;
+    char sexo[10];
     int edad;
 };
 
@@ -21,10 +21,17 @@ int main(int argc, char** argv){
         
         cout << "Un gusto, " << usuarios[0].nombre << ".\n\n";
         
-        cout << "Y dime, " << usuarios[0].nombre << ", tu eres del sexo...: ";
-        getline(cin,usuarios[0].sexo);
+        cout << "Y dime, " << usuarios[0].nombre << ", tu eres del sexo : ";
+        cin.getline(usuarios[0].sexo,10,'\n');
         
-        cout << "Ya veo. Excelente. Eres del sexo " << usuarios[0].sexo << ".\n\n";
+        cout << "Ya veo. Excelente. Eres del sexo " << strlwr(usuarios[0].sexo) << ".\n\n";
+
+        cout << "Por ultimo, " << usuarios[0].nombre << " , cual es tu edad: ";
+        cin >> usuarios[0].edad;
+        
+        cout << "Oh entiendo. Tienes " << usuarios[0].edad << ".\n\n";
+
+
 //}
     return 0;
 }
