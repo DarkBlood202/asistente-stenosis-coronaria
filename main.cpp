@@ -18,50 +18,49 @@ struct Usuario{
 //guardar datos al archivo
 void guardar_datos(Usuario user){
     ofstream registro;
-     registro.open("data.txt",ios::out);
+    registro.open("data.txt",ios::app);
     if(registro.fail()){
         cout << "\n\nHubo un error al tratar de abrir el arhivo de datos.";
         throw exception();      
     }
     
-    registro << user.nombre << "\n" << user.sexo << "\n" << user.edad << "\n";
+    registro << "Nombre: " << user.nombre << "\n" << "Sexo: " << user.sexo << "\n" << "Edad: " << user.edad << "\n\n";
     
     cout << "\n\nDatos guardados!\n\n";
 }
 
-int main(int argc, char** argv){
-    
-    Usuario usuarios[10];
-    bool confirmar_datos = false;
-    
-    cout << "Bienvenid@ a su sistema de asistencia en salud." << "\n\nVeo que es un usuario nuevo. Por favor, cuentame un poco sobre ti." << endl;
-    
-     //si datos no son correctos, se sigue preguntando por ellos
-     while(!confirmar_datos){
+void primer_uso(Usuario usuario){
+
+	bool confirmar_datos = false;
+
+	cout << "Bienvenid@ a su sistema de asistencia en salud." << "\n\nVeo que es un usuario nuevo. Por favor, cuentame un poco sobre ti." << endl;
+
+	//si datos no son correctos, se sigue preguntando por ellos
+    while(!confirmar_datos){
     
         cout <<"\nTu nombre, por favor: ";
-        getline(cin,usuarios[0].nombre);
+        getline(cin,usuario.nombre);
         
-        cout << "Un gusto, " << usuarios[0].nombre << ".\n\n";
+        cout << "Un gusto, " << usuario.nombre << ".\n\n";
         
-        cout << "Y dime, " << usuarios[0].nombre << ", tu eres del sexo : ";
-        cin.getline(usuarios[0].sexo,10,'\n');
+        cout << "Y dime, " << usuario.nombre << ", tu eres del sexo : ";
+        cin.getline(usuario.sexo,10,'\n');
         
-        cout << "Ya veo. Excelente. Eres del sexo " << /*strlwr(*/usuarios[0].sexo/*)*/ << ".\n\n";
+        cout << "Ya veo. Excelente. Eres del sexo " << /*strlwr(*/usuario.sexo/*)*/ << ".\n\n";
 
-        cout << "Por ultimo, " << usuarios[0].nombre << " , cual es tu edad: ";
+        cout << "Por ultimo, " << usuario.nombre << " , cual es tu edad: ";
         //validacion de numero entero
-        while(!(cin >> usuarios[0].edad)){
+        while(!(cin >> usuario.edad)){
         	cin.clear();
         	cin.ignore(100,'\n');
-        	cout << "Uhm... creo que te has confundido, " << usuarios[0].nombre << ".\n";
-        	cout << "Por ultimo, " << usuarios[0].nombre << " , cual es tu edad: ";
+        	cout << "Uhm... creo que te has confundido, " << usuario.nombre << ".\n";
+        	cout << "Por ultimo, " << usuario.nombre << " , cual es tu edad: ";
         }
         
-        cout << "Oh entiendo. Tienes " << usuarios[0].edad << ".\n\n";
+        cout << "Oh entiendo. Tienes " << usuario.edad << ".\n\n";
         
-        cout << "Ok. Recapitulemos, te parece?\nEres " << usuarios[0].nombre;
-		cout << ", del sexo " << usuarios[0].sexo << " y con " << usuarios[0].edad << " abriles.";
+        cout << "Ok. Recapitulemos, te parece?\nEres " << usuario.nombre;
+		cout << ", del sexo " << usuario.sexo << " y con " << usuario.edad << " abriles.";
 		
 		//limpiar el buffer
   		fflush(stdin);
@@ -78,12 +77,58 @@ int main(int argc, char** argv){
 			}
 			else if(respuesta_sn == "S" || respuesta_sn == "s"){
 				cout << "\nEsplendido. Entonces comencemos.\n";
-				guardar_datos(usuarios[0]);
+				guardar_datos(usuario);
     			validez_respuesta=true;
 				confirmar_datos=true;
 			}
 		}
 
 	}
+}
+
+void menu(){
+
+	bool confirmar_opcion = false;
+	int opcion_menu;
+
+	cout << "1.Informacion sobre la stenosis coronaria.\n2.Iniciar evaluacion de diagnostico.\n3.Revisar previas evaluaciones.\n4.Salir.";
+	cout << "\nIngrese opcion: ";
+
+	while(!(cin>>opcion_menu)){
+		cin.clear();
+		cin.ignore(100,'\n');
+		cout << "\n\nUhm... creo que te has equivocado. Intentalo de nuevo.\n\n";
+		cout << "Ingrese opcion: ";
+	}
+
+	switch(opcion_menu){
+		case 1:
+			confirmar_opcion = true; break;
+		case 2:
+			confirmar_opcion = true; break;
+		case 3:
+			confirmar_opcion = true; break;
+		case 4:
+			confirmar_opcion = true; break;
+		default:
+			cout << "\n\nUhm... creo que te has equivocado. Intentalo de nuevo.\n\n";
+	}
+}
+int main(int argc, char** argv){
+    
+    Usuario usuarios[10];
+    
+    ofstream registro;
+    registro.open("data.txt",ios::in);
+    if(registro.fail()){
+    	primer_uso(usuarios[0]);
+    }
+
+    else{
+    	cout << "Bienvenido de vuelta!\n\n";
+    	menu();
+    }
+    
+
     return 0;
 }
