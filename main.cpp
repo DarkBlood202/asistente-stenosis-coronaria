@@ -146,10 +146,8 @@ int main(int argc, char** argv){
     }
     else{
     	cout << "Bienvenid@ de vuelta, " << leer_nombre() << "!\n\n";
-    	
     }
     menu();
-    
 
     return 0;
 }
