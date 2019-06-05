@@ -24,13 +24,32 @@ void guardar_datos(Usuario user){
         throw exception();      
     }
     
-    registro << "Nombre: " << user.nombre << "\n" << "Sexo: " << user.sexo << "\n" << "Edad: " << user.edad << "\n\n";
+    registro /*<< "Nombre: " */<< user.nombre << "\n" <<
+	 /*"Sexo: " <<*/ user.sexo << "\n" <<
+	  /*"Edad: " <<*/ user.edad << "\n\n";
     
-    cout << "\n\nDatos guardados!\n\n";
+    cout << "\n(Se han guardado los datos)\n\n";
+    
+    registro.close();
 }
 
-void primer_uso(Usuario usuario){
+//leer nombre desde el archivo
+string leer_nombre(){
+	ifstream registro;
+	registro.open("data.txt",ios::in);
+	if(registro.fail()){
+		
+	}
+	else{
+		string nombre_de_usuario;
+		getline(registro,nombre_de_usuario);
+		registro.close();
+		return nombre_de_usuario;
+	}
+}
 
+//primer uso del programa
+void primer_uso(Usuario usuario){
 	bool confirmar_datos = false;
 
 	cout << "Bienvenid@ a su sistema de asistencia en salud." << "\n\nVeo que es un usuario nuevo. Por favor, cuentame un poco sobre ti." << endl;
@@ -60,7 +79,7 @@ void primer_uso(Usuario usuario){
         cout << "Oh entiendo. Tienes " << usuario.edad << ".\n\n";
         
         cout << "Ok. Recapitulemos, te parece?\nEres " << usuario.nombre;
-		cout << ", del sexo " << usuario.sexo << " y con " << usuario.edad << " abriles.";
+		cout << ", del sexo " << usuario.sexo << " y tienes " << usuario.edad << " anios de edad.";
 		
 		//limpiar el buffer
   		fflush(stdin);
@@ -86,11 +105,12 @@ void primer_uso(Usuario usuario){
 	}
 }
 
+//menu de opciones
 void menu(){
-
 	bool confirmar_opcion = false;
 	int opcion_menu;
-
+	
+	cout << "\tMENU DE OPCIONES\n";
 	cout << "1.Informacion sobre la stenosis coronaria.\n2.Iniciar evaluacion de diagnostico.\n3.Revisar previas evaluaciones.\n4.Salir.";
 	cout << "\nIngrese opcion: ";
 
@@ -114,20 +134,21 @@ void menu(){
 			cout << "\n\nUhm... creo que te has equivocado. Intentalo de nuevo.\n\n";
 	}
 }
+
 int main(int argc, char** argv){
     
-    Usuario usuarios[10];
+    Usuario usuario;
     
-    ofstream registro;
+    ifstream registro;
     registro.open("data.txt",ios::in);
     if(registro.fail()){
-    	primer_uso(usuarios[0]);
+    	primer_uso(usuario);
     }
-
     else{
-    	cout << "Bienvenido de vuelta!\n\n";
-    	menu();
+    	cout << "Bienvenid@ de vuelta, " << leer_nombre() << "!\n\n";
+    	
     }
+    menu();
     
 
     return 0;
