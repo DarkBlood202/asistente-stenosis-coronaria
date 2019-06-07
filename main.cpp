@@ -2,6 +2,8 @@
 #include<string.h>
 #include<fstream>
 #include<exception>
+#include<stdlib.h>
+#include<time.h>
 using namespace std;
 
 /*//puntero hacia la ubicacion y nombre del archivo
@@ -15,19 +17,95 @@ struct Usuario{
     int edad;
 };
 
+//linea divisoria de texto
+void linea_divisoria(int n){
+	for(int i=0;i<n;i++){
+		for(int j=0; j<50; j++){
+			cout << "-";
+		}
+		cout << endl;
+	}
+	cout << endl;
+}
+
+//frases de presentacion de informacion
+void frase_presentar_informacion(){
+	srand(time(NULL));
+	int indice_frase = rand() % 10;
+	switch(indice_frase){
+		case 0:	cout << "\nPor supuesto. Aqui te presento la informacion que poseo:\n"; break;
+		case 1:	cout << "\nEsta es la informacion que tengo al respecto:\n"; break;
+		case 2:	cout << "\nHe podido encontrar esto:\n"; break;
+		case 3:	cout << "\nPresentando informacion:\n"; break;
+		case 4:	cout << "\nLa siguiente informacion le puede ser util:\n"; break;
+		case 5:	cout << "\nEsto he podido recabar:\n"; break;
+		case 6:	cout << "\nAqui tiene la informacion recolectada:\n"; break;
+		case 7:	cout << "\nAqui te muestro lo que tengo a mi disposicion.\n"; break;
+		case 8:	cout << "\nMira :3\n"; break;
+		case 9:	cout << "\nLook what I got for you, milad... wait, were you a girl?\nAnyway...\n"; break;
+	}
+}
+
 //informacion sobre stenosis coronaria al usuario
 void informacion(){
-	cout << "\nPor supuesto. Aqui te presento la informacion que poseo:\n\n" << 
-	"La stenosis coronaria o tambien llamada cardiopatia isquemica, es una enfermedad\n" <<
-	"ocasionada por la arteriosclerosis de las arterias coronarias. Estas, son las\n" <<
-	"encargadas de proporcionar sangre al musculo cardiaco. La arteriosclerosis coronaria\n" <<
-	"es un proceso lento de acumulacion de lipidos (grasa) y linfocitos. Estos procesos\n" <<
-	"provocan el estrechamiento (stenosis) de las arterias coronarias.\n" <<
-	"Este proceso inicia en las primeras decadas de vida pero es asintomatico hasta que\n" <<
-	"la oclusion es tan grave que causa un desequilibrio en el aporte de oxigeno al\n" <<
-	"miocardio, provocando asi, una isquemia miocardica o una oclusion subita por trombosis\n" <<
-	"de la arteria. Esto concluye finalmente en el sindrome coronario agudo, mas conocido\n" <<
-	"como infarto agudo de miocardio.";
+	
+	int opcion_menu;
+	bool menu = true;
+	
+	while(menu){
+		cout << "\nPor favor elige el apartado del cual deseas saber:\n\n\t1.Que es la stenosis coronaria." <<
+		"\n\t2.Causas de la enfermedad." << "\n\t3.Tratamiento de la enfermedad." << "\n\t4.Regresar al menu principal.";
+		cout << "\n\tIngrese opcion: ";
+		while(!(cin>>opcion_menu)){
+			cin.clear();
+			cin.ignore(100,'\n');
+			cout << "\n\nUhm... Te has confundido. Por favor, ingresa una opcion valida.\n\n";
+			cout << "\tIngrese opcion: ";
+		}
+		
+		switch(opcion_menu){
+			case 1:
+				linea_divisoria(1);
+				frase_presentar_informacion();
+				cout << "\n\tSTENOSIS CORONARIA\n\n" << 
+				"La stenosis coronaria o tambien llamada cardiopatia isquemica, es una enfermedad\n" <<
+				"ocasionada por la arteriosclerosis de las arterias coronarias. Estas, son las\n" <<
+				"encargadas de proporcionar sangre al musculo cardiaco. La arteriosclerosis coronaria\n" <<
+				"es un proceso lento de acumulacion de lipidos (grasa) y linfocitos. Estos procesos\n" <<
+				"provocan el estrechamiento (stenosis) de las arterias coronarias.\n" <<
+				"Este proceso inicia en las primeras decadas de vida pero es asintomatico hasta que\n" <<
+				"la oclusion es tan grave que causa un desequilibrio en el aporte de oxigeno al\n" <<
+				"miocardio, provocando asi, una isquemia miocardica o una oclusion subita por trombosis\n" <<
+				"de la arteria. Esto concluye finalmente en el sindrome coronario agudo, mas conocido\n" <<
+				"como infarto agudo de miocardio.\n";
+				break;
+			case 2:
+				linea_divisoria(1);
+				frase_presentar_informacion();
+				cout << "\n\tCAUSAS DE LA STENOSIS CORONARIA\n\n" <<
+				"Los principales factores que producen la enfermedad son:\n" <<
+				"-Edad avanzada.\n-Menopausia.\n-Antecedentes de la enfermedad en la familia.\n" <<
+				"-Aumento del colesterol LDL (malo).\n-Disminucion del colesterol HDL (bueno).\n" <<
+				"-Tabaquismo.\n-Hipertension arterial.\n-Diabetes miellitus.\n-Obesidad.\n" <<
+				"-Sedentarismo.\n-Haber padecido previamente la enfermedad.\n";
+				break;
+			case 3:
+				linea_divisoria(1);
+				frase_presentar_informacion();
+				cout << "\n\tTRATAMIENTO DE LA STENOSIS CORONARIA\n\n";
+				break;
+			case 4:
+				linea_divisoria(2);
+				menu = false; break;
+			default:
+				cout << "\n\nUhm... Te has confundido. Por favor, ingresa una opcion valida.\n\n"; break;
+		}
+		
+		
+		
+	}
+	
+	
 }
 
 //guardar datos al archivo
@@ -83,6 +161,7 @@ void primer_uso(Usuario usuario){
         cout << "Ya veo. Excelente. Eres del sexo " << /*strlwr(*/usuario.sexo/*)*/ << ".\n\n";
 
         cout << "Por ultimo, " << usuario.nombre << " , cual es tu edad: ";
+        
         //validacion de numero entero
         while(!(cin >> usuario.edad)){
         	cin.clear();
@@ -125,29 +204,31 @@ void menu(){
 	bool confirmar_opcion = false;
 	int opcion_menu;
 	
-	cout << "\tMENU DE OPCIONES\n";
-	cout << "1.Informacion sobre la stenosis coronaria.\n2.Iniciar evaluacion de diagnostico.\n3.Revisar previas evaluaciones.\n4.Salir.";
-	cout << "\nIngrese opcion: ";
-
-	while(!(cin>>opcion_menu)){
-		cin.clear();
-		cin.ignore(100,'\n');
-		cout << "\n\nUhm... creo que te has equivocado. Intentalo de nuevo.\n\n";
-		cout << "Ingrese opcion: ";
-	}
-
-	switch(opcion_menu){
-		case 1:
-			informacion();
-			confirmar_opcion = true; break;
-		case 2:
-			confirmar_opcion = true; break;
-		case 3:
-			confirmar_opcion = true; break;
-		case 4:
-			confirmar_opcion = true; break;
-		default:
+	while(!confirmar_opcion){
+		cout << "\n\tMENU PRINCIPAL\n";
+		cout << "1.Informacion.\n2.Iniciar evaluacion de diagnostico.\n3.Revisar previas evaluaciones.\n4.Salir.";
+		cout << "\nIngrese opcion: ";
+	
+		while(!(cin>>opcion_menu)){
+			cin.clear();
+			cin.ignore(100,'\n');
 			cout << "\n\nUhm... creo que te has equivocado. Intentalo de nuevo.\n\n";
+			cout << "Ingrese opcion: ";
+		}
+	
+		switch(opcion_menu){
+			case 1:
+				informacion();
+				break;
+			case 2:
+				confirmar_opcion = true; break;
+			case 3:
+				confirmar_opcion = true; break;
+			case 4:
+				confirmar_opcion = true; break;
+			default:
+				cout << "\n\nUhm... creo que te has equivocado. Intentalo de nuevo.\n\n";
+		}
 	}
 }
 
@@ -161,7 +242,7 @@ int main(int argc, char** argv){
     	primer_uso(usuario);
     }
     else{
-    	cout << "Bienvenid@ de vuelta, " << leer_nombre() << "!\n\n";
+    	cout << "Bienvenid@ de vuelta, " << leer_nombre() << "!\n";
     }
     menu();
 
