@@ -15,6 +15,21 @@ struct Usuario{
     int edad;
 };
 
+//informacion sobre stenosis coronaria al usuario
+void informacion(){
+	cout << "\nPor supuesto. Aqui te presento la informacion que poseo:\n\n" << 
+	"La stenosis coronaria o tambien llamada cardiopatia isquemica, es una enfermedad\n" <<
+	"ocasionada por la arteriosclerosis de las arterias coronarias. Estas, son las\n" <<
+	"encargadas de proporcionar sangre al musculo cardiaco. La arteriosclerosis coronaria\n" <<
+	"es un proceso lento de acumulacion de lipidos (grasa) y linfocitos. Estos procesos\n" <<
+	"provocan el estrechamiento (stenosis) de las arterias coronarias.\n" <<
+	"Este proceso inicia en las primeras decadas de vida pero es asintomatico hasta que\n" <<
+	"la oclusion es tan grave que causa un desequilibrio en el aporte de oxigeno al\n" <<
+	"miocardio, provocando asi, una isquemia miocardica o una oclusion subita por trombosis\n" <<
+	"de la arteria. Esto concluye finalmente en el sindrome coronario agudo, mas conocido\n" <<
+	"como infarto agudo de miocardio.";
+}
+
 //guardar datos al archivo
 void guardar_datos(Usuario user){
     ofstream registro;
@@ -123,6 +138,7 @@ void menu(){
 
 	switch(opcion_menu){
 		case 1:
+			informacion();
 			confirmar_opcion = true; break;
 		case 2:
 			confirmar_opcion = true; break;
