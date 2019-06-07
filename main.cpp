@@ -23,7 +23,7 @@ void linea_divisoria(int n){
 		for(int j=0; j<50; j++){
 			cout << "-";
 		}
-		cout << endl;
+		if(n>1){cout << endl;}
 	}
 	cout << endl;
 }
@@ -78,6 +78,7 @@ void informacion(){
 				"miocardio, provocando asi, una isquemia miocardica o una oclusion subita por trombosis\n" <<
 				"de la arteria. Esto concluye finalmente en el sindrome coronario agudo, mas conocido\n" <<
 				"como infarto agudo de miocardio.\n";
+				linea_divisoria(1);
 				break;
 			case 2:
 				linea_divisoria(1);
@@ -88,11 +89,13 @@ void informacion(){
 				"-Aumento del colesterol LDL (malo).\n-Disminucion del colesterol HDL (bueno).\n" <<
 				"-Tabaquismo.\n-Hipertension arterial.\n-Diabetes miellitus.\n-Obesidad.\n" <<
 				"-Sedentarismo.\n-Haber padecido previamente la enfermedad.\n";
+				linea_divisoria(1);
 				break;
 			case 3:
 				linea_divisoria(1);
 				frase_presentar_informacion();
 				cout << "\n\tTRATAMIENTO DE LA STENOSIS CORONARIA\n\n";
+				linea_divisoria(1);
 				break;
 			case 4:
 				linea_divisoria(2);
