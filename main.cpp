@@ -20,12 +20,11 @@ struct Usuario{
 //linea divisoria de texto
 void linea_divisoria(int n){
 	for(int i=0;i<n;i++){
-		for(int j=0; j<50; j++){
+		for(int j=0; j<80; j++){
 			cout << "-";
 		}
 		if(n>1){cout << endl;}
 	}
-	cout << endl;
 }
 
 //frases de presentacion de informacion
@@ -67,34 +66,41 @@ void informacion(){
 			case 1:
 				linea_divisoria(1);
 				frase_presentar_informacion();
-				cout << "\n\tSTENOSIS CORONARIA\n\n" << 
-				"La stenosis coronaria o tambien llamada cardiopatia isquemica, es una enfermedad\n" <<
-				"ocasionada por la arteriosclerosis de las arterias coronarias. Estas, son las\n" <<
-				"encargadas de proporcionar sangre al musculo cardiaco. La arteriosclerosis coronaria\n" <<
-				"es un proceso lento de acumulacion de lipidos (grasa) y linfocitos. Estos procesos\n" <<
-				"provocan el estrechamiento (stenosis) de las arterias coronarias.\n" <<
-				"Este proceso inicia en las primeras decadas de vida pero es asintomatico hasta que\n" <<
-				"la oclusion es tan grave que causa un desequilibrio en el aporte de oxigeno al\n" <<
-				"miocardio, provocando asi, una isquemia miocardica o una oclusion subita por trombosis\n" <<
-				"de la arteria. Esto concluye finalmente en el sindrome coronario agudo, mas conocido\n" <<
-				"como infarto agudo de miocardio.\n";
+				cout << "\n\t\tSTENOSIS CORONARIA\n\n" <<
+				"La stenosis coronaria o tambien llamada cardiopatia isquemica, es una\n" <<
+				"enfermedad ocasionada por la arteriosclerosis de las arterias coronarias.\n" <<
+				"Estas, son las encargadas de proporcionar sangre al musculo cardiaco. La\n" <<
+				"arteriosclerosis coronaria es un proceso lento de acumulacion de grasas y\n" <<
+				"linfocitos que provocan el estrechamiento de las arterias coronarias.\n" <<
+				"Este proceso inicia en las primeras decadas de vida pero es asintomatico\n" <<
+				"hasta que la oclusion es tan grave que causa un desequilibrio en el aporte\n" <<
+				"de oxigeno al miocradio, provocando asi, una isquemia miocardica o una\n" <<
+				"oclusion subita por trombosis de la arteria. Esto concluye finalmente\n" <<
+				"en el sindrome coronario agudo, mas conocido como infarto agudo de\n" <<
+				"miocardio.\n";
 				linea_divisoria(1);
 				break;
 			case 2:
 				linea_divisoria(1);
 				frase_presentar_informacion();
-				cout << "\n\tCAUSAS DE LA STENOSIS CORONARIA\n\n" <<
+				cout << "\n\t\tCAUSAS DE LA STENOSIS CORONARIA\n\n" <<
 				"Los principales factores que producen la enfermedad son:\n" <<
-				"-Edad avanzada.\n-Menopausia.\n-Antecedentes de la enfermedad en la familia.\n" <<
-				"-Aumento del colesterol LDL (malo).\n-Disminucion del colesterol HDL (bueno).\n" <<
-				"-Tabaquismo.\n-Hipertension arterial.\n-Diabetes miellitus.\n-Obesidad.\n" <<
-				"-Sedentarismo.\n-Haber padecido previamente la enfermedad.\n";
+				"- Edad avanzada.\n- Menopausia.\n- Antecedentes de la enfermedad en la familia.\n" <<
+				"- Aumento del colesterol LDL (malo).\n- Disminucion del colesterol HDL (bueno).\n" <<
+				"- Tabaquismo.\n- Hipertension arterial.\n- Diabetes miellitus.\n- Obesidad.\n" <<
+				"- Sedentarismo.\n- Haber padecido previamente la enfermedad.\n";
 				linea_divisoria(1);
 				break;
 			case 3:
 				linea_divisoria(1);
 				frase_presentar_informacion();
-				cout << "\n\tTRATAMIENTO DE LA STENOSIS CORONARIA\n\n";
+				cout << "\n\t\tTRATAMIENTO DE LA STENOSIS CORONARIA\n\n" <<
+				"Se deben controlar estrictamente los factores de riesgo cardiovascular\n" <<
+				"y seguir chequeos periodicos para prevenir la aparicion de nuevos riesgos.\n" <<
+				"De existir, deben corregirse inmediatamente:\n" <<
+				"- Dejar el tabaco.\n- Vigilar la hipertension y diabetes.\n" <<
+				"- Llevar una dieta baja en colesterol y grasas.\n- Alcanzar un peso ideal.\n" <<
+				"- Reducir el colesterol hasta obtener una medida de LDL menor a 70mg/dl.\n";
 				linea_divisoria(1);
 				break;
 			case 4:
