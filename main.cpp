@@ -6,16 +6,29 @@
 #include<time.h>
 using namespace std;
 
-/*//puntero hacia la ubicacion y nombre del archivo
-string ubicacion_registro = "data.txt";
-string *a_ubicacion= &ubicacion_registro;*/
+//ubicacion y nombre del archivo
+char ubicacion_registro[] = "data.txt";
+
+//estructura reporte medico
+struct Reporte{
+	bool dolor_toracico;
+	int intensidad_dolor;
+	int duracion_dolor;
+	bool cede_dolor;
+};
 
 //estructura usuario
 struct Usuario{
     string nombre;
     char sexo[10];
     int edad;
+    Reporte reporte;
 };
+
+//evaluacion de diagnostico
+void diagnostico(Usuario user){
+	
+}
 
 //linea divisoria de texto
 void linea_divisoria(int n){
@@ -40,8 +53,8 @@ void frase_presentar_informacion(){
 		case 5:	cout << "\nEsto he podido recabar:\n"; break;
 		case 6:	cout << "\nAqui tiene la informacion recolectada:\n"; break;
 		case 7:	cout << "\nAqui te muestro lo que tengo a mi disposicion.\n"; break;
-		case 8:	cout << "\nMira :3\n"; break;
-		case 9:	cout << "\nLook what I got for you, milad... wait, were you a girl?\nAnyway...\n"; break;
+		case 8:	cout << "\nProcedo a mostrarle la informacion:\n"; break;
+		case 9:	cout << "\nMira lo que te traigooo (-w-)/ !!!:\n"; break;
 	}
 }
 
@@ -120,7 +133,7 @@ void informacion(){
 //guardar datos al archivo
 void guardar_datos(Usuario user){
     ofstream registro;
-    registro.open("data.txt",ios::app);
+    registro.open(ubicacion_registro,ios::app);
     if(registro.fail()){
         cout << "\n\nHubo un error al tratar de abrir el arhivo de datos.";
         throw exception();      
@@ -138,7 +151,7 @@ void guardar_datos(Usuario user){
 //leer nombre desde el archivo
 string leer_nombre(){
 	ifstream registro;
-	registro.open("data.txt",ios::in);
+	registro.open(ubicacion_registro,ios::in);
 	if(registro.fail()){
 		
 	}
@@ -246,7 +259,7 @@ int main(int argc, char** argv){
     Usuario usuario;
     
     ifstream registro;
-    registro.open("data.txt",ios::in);
+    registro.open(ubicacion_registro,ios::in);
     if(registro.fail()){
     	primer_uso(usuario);
     }
