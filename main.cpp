@@ -10,11 +10,21 @@ using namespace std;
 char ubicacion_registro[] = "data.txt";
 
 //estructura reporte medico
+struct Dolor_Torax{
+	bool existe;
+	int intensidad;
+	int duracion_min;
+	bool cede;
+};
+
 struct Reporte{
-	bool dolor_toracico;
-	int intensidad_dolor;
-	int duracion_dolor;
-	bool cede_dolor;
+	Dolor_Torax dolor_torax;
+	bool estres;
+	bool arritmia;
+	bool agotamiento;
+	bool hinchazon;
+	bool nauseas;
+	bool insomnio;
 };
 
 //estructura usuario
@@ -28,6 +38,17 @@ struct Usuario{
 //evaluacion de diagnostico
 void diagnostico(Usuario user){
 	
+	/*bool confirmar_datos = false;
+	
+	while(!confirmar_datos){
+		cout << "\nMuy bien. Realicemos un diagnostico rapidamente, te parece " << user.nombre << " ?\n" <<
+		"Te hare algunas preguntas que deberas responder, de acuerdo?\n\n";
+		
+		
+		
+	}*/
+	
+	cout << endl << user.nombre << endl;
 }
 
 //linea divisoria de texto
@@ -135,7 +156,7 @@ void guardar_datos(Usuario user){
     ofstream registro; //crear un archivo referido por variable registro
     registro.open(ubicacion_registro,ios::app); //abrir archivo en la ubicacion, en modo agregar
     if(registro.fail()){
-        cout << "\n\nHubo un error al tratar de abrir el archivo de datos.";
+        cout << "\n\nSe produjo un error al crear el archivo de datos.";
         throw exception(); //enviar mensaje de error y terminar el programa.
     }
     
@@ -148,19 +169,31 @@ void guardar_datos(Usuario user){
     registro.close();
 }
 
-//leer nombre desde el archivo
-string leer_nombre(){
+//cargar usuario desde el archivo a la estructura
+void cargar_usuario(Usuario& user){
 	ifstream registro;
 	registro.open(ubicacion_registro,ios::in);
 	if(registro.fail()){
-		
+		cout << "\n\nSe produjo un error al leer el archivo de datos.";
+		throw exception();
 	}
-	else{
-		string nombre_de_usuario;
-		getline(registro,nombre_de_usuario);
-		registro.close();
-		return nombre_de_usuario;
+	
+	getline(registro,user.nombre); //cargando el nombre
+	registro.getline(user.sexo,10,'\n'); //cargando el sexo
+	
+	string cadena_edad; //se define una cadena que tendra el valor de la edad
+	int linea_archivo=0; //se crea un iterador que cuenta las lineas del archivo
+	int linea_edad=3; //linea en el archivo donde se encuentra la edad
+	
+	//mientras el numero de linea no sea la deseada (en este caso la edad) y exista esa linea en el archivo
+	while(linea_archivo != linea_edad && getline(registro,cadena_edad)){
+		++linea_archivo; //se aumenta el valor de la variable iterativa para pasar de lineas hasta la deseada
 	}
+	if(linea_archivo == linea_edad){
+		//se llega a la linea deseada, pero se lee en formato string, por lo que se convierte a int para guardarlo en la estructura
+		user.edad = atoi(cadena_edad.c_str());
+	}
+	
 }
 
 //primer uso del programa
@@ -222,7 +255,7 @@ void primer_uso(Usuario usuario){
 }
 
 //menu de opciones
-void menu(){
+void menu(Usuario usuario){
 	bool confirmar_opcion = false;
 	int opcion_menu;
 	
@@ -243,7 +276,8 @@ void menu(){
 				informacion();
 				break;
 			case 2:
-				confirmar_opcion = true; break;
+				diagnostico(usuario);
+				break;
 			case 3:
 				confirmar_opcion = true; break;
 			case 4:
@@ -262,11 +296,13 @@ int main(int argc, char** argv){
     registro.open(ubicacion_registro,ios::in);
     if(registro.fail()){
     	primer_uso(usuario);
+    	linea_divisoria(2);
     }
     else{
-    	cout << "Bienvenid@ de vuelta, " << leer_nombre() << "!\n";
+    	cargar_usuario(usuario);
+    	cout << "Bienvenid@ de vuelta, " << usuario.nombre << "!\n";
     }
-    menu();
+    menu(usuario);
 
     return 0;
 }
