@@ -132,11 +132,11 @@ void informacion(){
 
 //guardar datos al archivo
 void guardar_datos(Usuario user){
-    ofstream registro;
-    registro.open(ubicacion_registro,ios::app);
+    ofstream registro; //crear un archivo referido por variable registro
+    registro.open(ubicacion_registro,ios::app); //abrir archivo en la ubicacion, en modo agregar
     if(registro.fail()){
-        cout << "\n\nHubo un error al tratar de abrir el arhivo de datos.";
-        throw exception();      
+        cout << "\n\nHubo un error al tratar de abrir el archivo de datos.";
+        throw exception(); //enviar mensaje de error y terminar el programa.
     }
     
     registro /*<< "Nombre: " */<< user.nombre << "\n" <<
