@@ -35,22 +35,6 @@ struct Usuario{
     Reporte reporte;
 };
 
-//evaluacion de diagnostico
-void diagnostico(Usuario user){
-	
-	/*bool confirmar_datos = false;
-	
-	while(!confirmar_datos){
-		cout << "\nMuy bien. Realicemos un diagnostico rapidamente, te parece " << user.nombre << " ?\n" <<
-		"Te hare algunas preguntas que deberas responder, de acuerdo?\n\n";
-		
-		
-		
-	}*/
-	
-	cout << endl << user.nombre << endl;
-}
-
 //linea divisoria de texto
 void linea_divisoria(int n){
 	for(int i=0;i<n;i++){
@@ -142,13 +126,43 @@ void informacion(){
 				menu = false; break;
 			default:
 				cout << "\n\nUhm... Te has confundido. Por favor, ingresa una opcion valida.\n\n"; break;
-		}
-		
-		
-		
+		}	
 	}
+}
+
+//evaluacion de diagnostico
+void diagnostico(Usuario user){
 	
+	bool confirmar_datos = false;
+	bool val1 = false;
+	int op1;
 	
+	while(!confirmar_datos){
+
+		linea_divisoria(2);
+		cout << "\nMuy bien. Realicemos un diagnostico rapidamente, " << user.nombre << ".\n" <<
+		"Te hare algunas preguntas que deberas responder, de acuerdo?\n\n";
+		linea_divisoria(1);
+		while(!val1){
+			cout << "Sufres de estres?\n"<< "\n1.SI\n2.NO\n3.NO SEMEN\n\nTu respuesta: ";
+			while(!(cin>>op1)){
+				cin.clear();
+				cin.ignore(100,'\n');
+				cout << "\n\nERROR. Introduce una opcion valida we\n\n";
+				cout << "Sufres de estres?\n"<< "\n1.Si\n2.No\n3.NO SEMEN\n\nTu respuesta: ";
+			}
+			switch(op1){
+				case 1: user.reporte.estres = true; val1=true; break;
+				case 2: user.reporte.estres = false; val1=true; break;
+				case 3: val1=true; break; 
+				default: cout << "\n\nERROR. Introduce una opcion valida we\n\n"; break;
+			}
+		}
+		linea_divisoria(1);
+
+		confirmar_datos = true;
+	}
+
 }
 
 //guardar datos al archivo
