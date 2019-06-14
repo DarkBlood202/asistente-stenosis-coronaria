@@ -297,6 +297,7 @@ int main(int argc, char** argv){
     if(registro.fail()){
     	primer_uso(usuario);
     	linea_divisoria(2);
+    	cargar_usuario(usuario);
     }
     else{
     	cargar_usuario(usuario);
