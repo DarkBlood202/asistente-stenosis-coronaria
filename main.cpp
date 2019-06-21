@@ -130,35 +130,64 @@ void informacion(){
 	}
 }
 
+template<class valor>
+void hacer_pregunta(string pregunta, valor& dato, bool sn){
+	bool validez=false;
+	int opcion;
+	linea_divisoria(1);
+	while(!validez){
+		cout << pregunta << endl << endl;
+		if(sn){cout << "1.Si\n2.No\n3.No lo se\n\nTu respuesta: ";}
+		else{cout << "\nTu respuesta: ";}
+		while(!(cin>>opcion)){
+			cin.clear();
+			cin.ignore(100,'\n');
+			cout << "\n\nERROR. Por favor introduce una opcion valida.\n\n";
+			cout << pregunta << endl;
+			if(sn){cout << "1.Si\n2.No\n3.No lo se\n\nTu respuesta: ";}
+		}
+		if(sn){
+			switch(opcion){
+				case 1:	dato=true; validez=true; break;
+				case 2: dato=false; validez=true; break;
+				case 3: validez=true; break;
+				default: cout << "\n\nERROR. Por favor introduce una opcion valida.\n\n";
+			}
+		}
+		else{
+			dato = opcion;
+			validez = true;
+		}
+	}
+}
+
 //evaluacion de diagnostico
 void diagnostico(Usuario user){
 	
 	bool confirmar_datos = false;
-	bool val1 = false;
-	int op1;
+	
+	bool validez=false;
+	int opcion;
 	
 	while(!confirmar_datos){
 
 		linea_divisoria(2);
 		cout << "\nMuy bien. Realicemos un diagnostico rapidamente, " << user.nombre << ".\n" <<
-		"Te hare algunas preguntas que deberas responder, de acuerdo?\n\n";
-		linea_divisoria(1);
-		while(!val1){
-			cout << "Sufres de estres?\n"<< "\n1.SI\n2.NO\n3.NO SEMEN\n\nTu respuesta: ";
-			while(!(cin>>op1)){
-				cin.clear();
-				cin.ignore(100,'\n');
-				cout << "\n\nERROR. Introduce una opcion valida we\n\n";
-				cout << "Sufres de estres?\n"<< "\n1.Si\n2.No\n3.NO SEMEN\n\nTu respuesta: ";
-			}
-			switch(op1){
-				case 1: user.reporte.estres = true; val1=true; break;
-				case 2: user.reporte.estres = false; val1=true; break;
-				case 3: val1=true; break; 
-				default: cout << "\n\nERROR. Introduce una opcion valida we\n\n"; break;
-			}
+		"Te hare algunas preguntas, de acuerdo?\n\n";
+		
+		hacer_pregunta("Sufres de estres?",user.reporte.estres,true);
+		hacer_pregunta("Has experimentado arritmia cardiaca?",user.reporte.arritmia,true);
+		hacer_pregunta("Sientes agostamiento constantemente?",user.reporte.agotamiento,true);
+		hacer_pregunta("Has notado hinchazon en partes de tu cuerpo?",user.reporte.hinchazon,true);
+		hacer_pregunta("Has sufrido episodios de nausea?",user.reporte.nauseas,true);
+		hacer_pregunta("Presentas dificultad para dormir?",user.reporte.insomnio,true);
+		
+		hacer_pregunta("En algun momento has sentido dolor en la zona superior de tu cuerpo?",user.reporte.dolor_torax.existe,true);
+		if(user.reporte.dolor_torax.existe){
+			hacer_pregunta("Que tan intenso es ese dolor?\nRANGO: [1]Poco intenso a [9]Muy intenso",user.reporte.dolor_torax.intensidad,false);
+			hacer_pregunta("Cuanto aproximadamente dura ese dolor en minutos?",user.reporte.dolor_torax.duracion_min,false);
+			hacer_pregunta("El dolor cede pasado ese tiempo?",user.reporte.dolor_torax.cede,true);
 		}
-		linea_divisoria(1);
 
 		confirmar_datos = true;
 	}
