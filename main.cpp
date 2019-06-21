@@ -235,6 +235,7 @@ void diagnostico(Usuario user){
 			}
 			else if(respuesta_sn == "S" || respuesta_sn == "s"){
 				cout << "\n\n...Guardando Datos...\n\n";
+				linea_divisoria(2);
     			validez_respuesta=true;
 				confirmar_datos=true;
 			}
