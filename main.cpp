@@ -130,21 +130,22 @@ void informacion(){
 	}
 }
 
-template<class valor>
+//hacer pregunta para diagnostico y guardar informacion a la estructura
+template<class valor> //plantilla de funcion
 void hacer_pregunta(string pregunta, valor& dato, bool sn){
 	bool validez=false;
 	int opcion;
 	linea_divisoria(1);
 	while(!validez){
-		cout << pregunta << endl << endl;
-		if(sn){cout << "1.Si\n2.No\n3.No lo se\n\nTu respuesta: ";}
+		cout << endl <<pregunta << endl << endl;
+		if(sn){cout << "1.Si\t2.No\t3.No lo se\n\nTu respuesta: ";}
 		else{cout << "\nTu respuesta: ";}
 		while(!(cin>>opcion)){
 			cin.clear();
 			cin.ignore(100,'\n');
 			cout << "\n\nERROR. Por favor introduce una opcion valida.\n\n";
 			cout << pregunta << endl;
-			if(sn){cout << "1.Si\n2.No\n3.No lo se\n\nTu respuesta: ";}
+			if(sn){cout << "1.Si\t2.No\t3.No lo se\n\nTu respuesta: ";}
 		}
 		if(sn){
 			switch(opcion){
@@ -161,13 +162,27 @@ void hacer_pregunta(string pregunta, valor& dato, bool sn){
 	}
 }
 
+//mostrar resultado al usuario (formato que él pueda entender)
+template<class val> //plantilla de funcion
+void mostrar_resultado(string categoria, val valor, bool sn){
+	cout << categoria << ": ";
+	if(sn){
+		switch(valor){
+			case 0: cout << "\t\t\tNo"; break;
+			case 1: cout << "\t\t\tSi"; break;
+			default: cout << "\t\t\tNo lo se"; break;
+		}
+	}
+	else{
+		cout << "\t\t" << valor;
+	}
+	cout << endl;
+}
+
 //evaluacion de diagnostico
 void diagnostico(Usuario user){
 	
 	bool confirmar_datos = false;
-	
-	bool validez=false;
-	int opcion;
 	
 	while(!confirmar_datos){
 
@@ -184,14 +199,47 @@ void diagnostico(Usuario user){
 		
 		hacer_pregunta("En algun momento has sentido dolor en la zona superior de tu cuerpo?",user.reporte.dolor_torax.existe,true);
 		if(user.reporte.dolor_torax.existe){
-			hacer_pregunta("Que tan intenso es ese dolor?\nRANGO: [1]Poco intenso a [9]Muy intenso",user.reporte.dolor_torax.intensidad,false);
+			hacer_pregunta("Que tan intenso es ese dolor?\nRANGO: [1]Poco intenso a Muy intenso[9]",user.reporte.dolor_torax.intensidad,false);
 			hacer_pregunta("Cuanto aproximadamente dura ese dolor en minutos?",user.reporte.dolor_torax.duracion_min,false);
 			hacer_pregunta("El dolor cede pasado ese tiempo?",user.reporte.dolor_torax.cede,true);
 		}
-
-		confirmar_datos = true;
+		
+		linea_divisoria(1);
+		
+		cout << "\nEstos son los datos que has introducido:\n\n";
+		
+		mostrar_resultado("ESTRES",user.reporte.estres,true);
+		mostrar_resultado("ARRITMIA",user.reporte.arritmia,true);
+		mostrar_resultado("AGOTAMIENTO",user.reporte.agotamiento,true);
+		mostrar_resultado("HINCHAZON",user.reporte.hinchazon,true);
+		mostrar_resultado("NAUSEAS",user.reporte.nauseas,true);
+		mostrar_resultado("INSOMNIO",user.reporte.insomnio,true);
+		mostrar_resultado("DOLOR_TORAX",user.reporte.dolor_torax.existe,true);
+		if(user.reporte.dolor_torax.existe){
+			mostrar_resultado("INTENSIDAD DOLOR",user.reporte.dolor_torax.intensidad,false);
+			mostrar_resultado("DURACION DOLOR(MIN)",user.reporte.dolor_torax.duracion_min,false);
+			mostrar_resultado("EL DOLOR CEDE",user.reporte.dolor_torax.cede,true);
+		}
+		
+		bool validez_respuesta = false;
+		string respuesta_sn;
+		
+		fflush(stdin);
+		
+		while(!validez_respuesta){
+			cout << "\n\nConfirma que los datos ingresados son correctos? (S/N)\nIngrese su respuesta:";
+			getline(cin,respuesta_sn);
+			if (respuesta_sn == "N" || respuesta_sn == "n"){
+				cout << "\nComprendido. Intentemoslo nuevamente.\n";
+				validez_respuesta=true;
+			}
+			else if(respuesta_sn == "S" || respuesta_sn == "s"){
+				cout << "\n\n...Guardando Datos...\n\n";
+    			validez_respuesta=true;
+				confirmar_datos=true;
+			}
+		}
 	}
-
 }
 
 //guardar datos al archivo
