@@ -39,8 +39,16 @@ struct Usuario{
 };
 
 //tiempo local con formato
-void tiempo_actual(){
-	return;
+string tiempo_actual(){
+	time_t ahora = time(NULL);
+	tm *ltm = localtime(&ahora);
+	
+	char tiempo_en_cadena[30];
+	memset(tiempo_en_cadena,0x0,30);
+	
+	sprintf(tiempo_en_cadena,"%d/%d/%d",ltm->tm_mday, ltm->tm_mon, ltm->tm_year+1900);
+	
+	return tiempo_en_cadena;
 }
 
 //linea divisoria de texto
@@ -298,7 +306,7 @@ void diagnostico(Usuario user){
 				
 				diag << "======================================================" << "\n"
 				<< "\t\t" << "DIAGNOSTICO DE: " << user.nombre << "\n"
-				<< "\tgenerado el " << "(dd,mm,yyyy)." << "\n"
+				<< "\t\tgenerado el " << tiempo_actual() << "\n"
 				<< "======================================================" << endl;
 				
 				diag << resultado_como_cadena("ESTRES",user.reporte.estres,true) << "\n"
