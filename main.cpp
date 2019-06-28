@@ -38,6 +38,11 @@ struct Usuario{
     Reporte reporte;
 };
 
+//tiempo local con formato
+void tiempo_actual(){
+	return;
+}
+
 //linea divisoria de texto
 void linea_divisoria(int n){
 	for(int i=0;i<n;i++){
@@ -165,7 +170,7 @@ void hacer_pregunta(string pregunta, valor& dato, bool sn){
 	}
 }
 
-//mostrar resultado al usuario (formato que �l pueda entender)
+//mostrar resultado al usuario (formato que el pueda entender)
 template<class val> //plantilla de funcion
 void mostrar_resultado(string categoria, val valor, bool sn){
 	cout << categoria << ": ";
@@ -182,7 +187,7 @@ void mostrar_resultado(string categoria, val valor, bool sn){
 	cout << endl;
 }
 
-//devolver resultado como cadena para a�adir al archivo facilmente
+//devolver resultado como cadena para anadir al archivo facilmente
 template<class val> //plantilla de funcion
 string resultado_como_cadena(string categoria, val valor, bool sn){
 	
@@ -212,7 +217,7 @@ string resultado_como_cadena(string categoria, val valor, bool sn){
 		char valor_en_cadena[5]; //crea arreglo para guardar el valor numerico
 		memset(valor_en_cadena,0x0,5); //inicializ el arreglo con elementos nulos para evitar caracteres basura
 	 
-  sprintf(valor_en_cadena,"%d",valor); //funcion de c para convertir un valor numerico en formato arreglo y guardarlo en el arreglo
+  		sprintf(valor_en_cadena,"%d",valor); //funcion de c para convertir un valor numerico en formato arreglo y guardarlo en el arreglo
 	
 		strcat(respuesta,valor_en_cadena); //agrega al arreglo respuesta el arreglo valor_en_cadena que es el numero convertido
 		
@@ -290,6 +295,12 @@ void diagnostico(Usuario user){
 				}
 				
 				//se guarda linea por linea cada resultado en formato cadena legible para el usuario
+				
+				diag << "======================================================" << "\n"
+				<< "\t\t" << "DIAGNOSTICO DE: " << user.nombre << "\n"
+				<< "\tgenerado el " << "(dd,mm,yyyy)." << "\n"
+				<< "======================================================" << endl;
+				
 				diag << resultado_como_cadena("ESTRES",user.reporte.estres,true) << "\n"
 				<< resultado_como_cadena("ARRITMIA",user.reporte.arritmia,true) << "\n"
 				<< resultado_como_cadena("AGOTAMIENTO",user.reporte.agotamiento,true) << "\n"
@@ -304,6 +315,8 @@ void diagnostico(Usuario user){
 					<< resultado_como_cadena("EL DOLOR CEDE",user.reporte.dolor_torax.cede,true) << endl;
 				}
 				
+				diag << "------------------------------------------------------" << endl;
+				
 				diag.close(); //se cierra el archivo
 				
 				cout << "\n\n...Guardando Datos...\n\n";
@@ -315,6 +328,11 @@ void diagnostico(Usuario user){
 	}
 }
 
+//leer diagnosticos
+void leer_diagnosticos(){
+	return;
+}
+
 //guardar datos al archivo
 void guardar_datos(Usuario user){
     ofstream registro; //crear un archivo referido por variable registro
@@ -324,13 +342,13 @@ void guardar_datos(Usuario user){
         throw exception(); //enviar mensaje de error y terminar el programa.
     }
     
-    registro /*<< "Nombre: " */<< user.nombre << "\n" <<
-	 /*"Sexo: " <<*/ user.sexo << "\n" <<
-	  /*"Edad: " <<*/ user.edad << "\n\n";
-    
-    cout << "\n(Se han guardado los datos)\n\n";
+    registro << user.nombre << "\n"
+	<< user.sexo << "\n"
+	<< user.edad << endl;
     
     registro.close();
+    
+    cout << "\n(Se han guardado los datos)\n\n";
 }
 
 //cargar usuario desde el archivo a la estructura
@@ -374,7 +392,7 @@ void primer_uso(Usuario usuario){
         
         cout << "Un gusto, " << usuario.nombre << ".\n\n";
         
-        cout << "Y dime, " << usuario.nombre << ", tu eres del sexo : ";
+        cout << "Y dime, " << usuario.nombre << ", tu eres del sexo: ";
         cin.getline(usuario.sexo,10,'\n');
         
         cout << "Ya veo. Excelente. Eres del sexo " << /*strlwr(*/usuario.sexo/*)*/ << ".\n\n";
