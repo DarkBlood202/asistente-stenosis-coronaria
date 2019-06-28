@@ -82,6 +82,8 @@ void frase_presentar_informacion(){
 //informacion sobre stenosis coronaria al usuario
 void informacion(){
 	
+	linea_divisoria(2);
+	
 	int opcion_menu;
 	bool menu = true;
 	
@@ -338,6 +340,15 @@ void diagnostico(Usuario user){
 
 //leer diagnosticos
 void leer_diagnosticos(){
+	
+	linea_divisoria(2);
+	
+	ifstream diag;
+	diag.open(archivo_diagnosticos,ios::in);
+	if(diag.fail()){
+		cout << "\n\nERROR. NO EXISTE NINGUN ARCHIVO DE DIAGNOSTICO.\n\n";
+		return;
+	}
 	return;
 }
 
@@ -469,7 +480,8 @@ void menu(Usuario usuario){
 				diagnostico(usuario);
 				break;
 			case 3:
-				confirmar_opcion = true; break;
+				leer_diagnosticos();
+				break;
 			case 4:
 				confirmar_opcion = true; break;
 			default:
