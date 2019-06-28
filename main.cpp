@@ -1,14 +1,14 @@
 #include<iostream> //entrada y salida estandar de c++
 #include<string.h> //manejo de cadenas
-#include<sstream> //funciones adicionales de cadena
 #include<fstream> //manejo de archivos
 #include<exception> //manejo de excepciones
 #include<stdlib.h> //acceso a algunas funciones como random
 #include<time.h> //acceso al tiempo del sistema
+#include<stdio.h> //entrada y salida estandar de c
 using namespace std;
 
 //ubicacion y nombre del archivo
-char ubicacion_registro[] = "data.txt";
+char ubicacion_registro[] = "user.txt";
 char archivo_diagnosticos[] = "diag.txt";
 
 //estructura reporte medico
@@ -37,14 +37,6 @@ struct Usuario{
     int edad;
     Reporte reporte;
 };
-
-//convertir int a cadena
-string numero_a_cadena(int num){
-	string cadena;
-	stringstream ss;
-	ss << num;
-	cadena = ss.str();
-}
 
 //linea divisoria de texto
 void linea_divisoria(int n){
@@ -216,7 +208,13 @@ string resultado_como_cadena(string categoria, val valor, bool sn){
 	}
 	else{
 		strcpy(respuesta,"\t\t"); //copia el valor del arreglo "\t\t" al arreglo respuesta
-		strcat(respuesta,numero_a_cadena(valor).c_str()); //agrega al arreglo respuesta el valor convertido a string que es convertido a arreglo
+		
+		char valor_en_cadena[5]; //crea arreglo para guardar el valor numerico
+		memset(valor_en_cadena,0x0,5); //inicializ el arreglo con elementos nulos para evitar caracteres basura
+		
+		itoa(valor,valor_en_cadena,10); //funcion de c para convertir un valor numerico en formato arreglo y guardarlo en el arreglo
+	
+		strcat(respuesta,valor_en_cadena); //agrega al arreglo respuesta el arreglo valor_en_cadena que es el numero convertido
 		
 	}
 	strcat(resultado,cat); //en teoria: "categoria: "
@@ -240,7 +238,7 @@ void diagnostico(Usuario user){
 		
 		hacer_pregunta("Sufres de estres?",user.reporte.estres,true);
 		hacer_pregunta("Has experimentado arritmia cardiaca?",user.reporte.arritmia,true);
-		hacer_pregunta("Sientes agostamiento constantemente?",user.reporte.agotamiento,true);
+		hacer_pregunta("Sientes agotamiento constantemente?",user.reporte.agotamiento,true);
 		hacer_pregunta("Has notado hinchazon en partes de tu cuerpo?",user.reporte.hinchazon,true);
 		hacer_pregunta("Has sufrido episodios de nausea?",user.reporte.nauseas,true);
 		hacer_pregunta("Presentas dificultad para dormir?",user.reporte.insomnio,true);
@@ -285,7 +283,7 @@ void diagnostico(Usuario user){
 				
 				//proceso de guardado de resultados de evaluacion a archivo
 				ofstream diag; //creacion de archivo de diagnostico
-				diag.open(archivo_diagnosticos,ios::app); //abrir archivo de diagnostico en modo agregar
+				diag.open(archivo_diagnosticos,ios::out); //abrir archivo de diagnostico en modo agregar
 				if(diag.fail()){ //si no puede crearse el archivo
 					cout << "\n\nSe produjo un error al generar el archivo de diagnosticos.";
 					throw exception(); //enviar mensaje de error y cerrar el programa
@@ -299,6 +297,12 @@ void diagnostico(Usuario user){
 				<< resultado_como_cadena("NAUSEAS",user.reporte.nauseas,true) << "\n"
 				<< resultado_como_cadena("INSOMNIO",user.reporte.insomnio,true) << "\n"
 				<< resultado_como_cadena("DOLOR_TORAX",user.reporte.dolor_torax.existe,true) << endl;
+				
+				if(user.reporte.dolor_torax.existe){
+					diag << resultado_como_cadena("INTENSIDAD DOLOR",user.reporte.dolor_torax.intensidad,false) << "\n"
+					<< resultado_como_cadena("DURACION DOLOR(MIN)",user.reporte.dolor_torax.duracion_min,false) << "\n"
+					<< resultado_como_cadena("EL DOLOR CEDE",user.reporte.dolor_torax.cede,true) << endl;
+				}
 				
 				diag.close(); //se cierra el archivo
 				
