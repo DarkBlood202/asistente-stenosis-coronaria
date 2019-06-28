@@ -165,7 +165,7 @@ void hacer_pregunta(string pregunta, valor& dato, bool sn){
 	}
 }
 
-//mostrar resultado al usuario (formato que él pueda entender)
+//mostrar resultado al usuario (formato que ï¿½l pueda entender)
 template<class val> //plantilla de funcion
 void mostrar_resultado(string categoria, val valor, bool sn){
 	cout << categoria << ": ";
@@ -182,11 +182,11 @@ void mostrar_resultado(string categoria, val valor, bool sn){
 	cout << endl;
 }
 
-//devolver resultado como cadena para añadir al archivo facilmente
+//devolver resultado como cadena para aï¿½adir al archivo facilmente
 template<class val> //plantilla de funcion
 string resultado_como_cadena(string categoria, val valor, bool sn){
 	
-	char cat[categoria.length()+1]; //crear arreglo de caracteres con tamaño de la string categoria +1
+	char cat[categoria.length()+1]; //crear arreglo de caracteres con tamaï¿½o de la string categoria +1
 	memset(cat,0x0,categoria.length()+1); //inicializa el arreglo con elementos nulos para evitar caracteres basura
 	
 	strcpy(cat,categoria.c_str()); //copia el valor de categoria (String) a cat (arreglo)
@@ -211,8 +211,8 @@ string resultado_como_cadena(string categoria, val valor, bool sn){
 		
 		char valor_en_cadena[5]; //crea arreglo para guardar el valor numerico
 		memset(valor_en_cadena,0x0,5); //inicializ el arreglo con elementos nulos para evitar caracteres basura
-		
-		itoa(valor,valor_en_cadena,10); //funcion de c para convertir un valor numerico en formato arreglo y guardarlo en el arreglo
+	 
+  sprintf(valor_en_cadena,"%d",valor); //funcion de c para convertir un valor numerico en formato arreglo y guardarlo en el arreglo
 	
 		strcat(respuesta,valor_en_cadena); //agrega al arreglo respuesta el arreglo valor_en_cadena que es el numero convertido
 		
