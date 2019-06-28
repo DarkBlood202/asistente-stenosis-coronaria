@@ -1,13 +1,15 @@
-#include<iostream>
-#include<string.h>
-#include<fstream>
-#include<exception>
-#include<stdlib.h>
-#include<time.h>
+#include<iostream> //entrada y salida estandar de c++
+#include<string.h> //manejo de cadenas
+#include<sstream> //funciones adicionales de cadena
+#include<fstream> //manejo de archivos
+#include<exception> //manejo de excepciones
+#include<stdlib.h> //acceso a algunas funciones como random
+#include<time.h> //acceso al tiempo del sistema
 using namespace std;
 
 //ubicacion y nombre del archivo
 char ubicacion_registro[] = "data.txt";
+char archivo_diagnosticos[] = "diag.txt";
 
 //estructura reporte medico
 struct Dolor_Torax{
@@ -25,6 +27,7 @@ struct Reporte{
 	bool hinchazon;
 	bool nauseas;
 	bool insomnio;
+	int contador;
 };
 
 //estructura usuario
@@ -34,6 +37,14 @@ struct Usuario{
     int edad;
     Reporte reporte;
 };
+
+//convertir int a cadena
+string numero_a_cadena(int num){
+	string cadena;
+	stringstream ss;
+	ss << num;
+	cadena = ss.str();
+}
 
 //linea divisoria de texto
 void linea_divisoria(int n){
@@ -179,6 +190,43 @@ void mostrar_resultado(string categoria, val valor, bool sn){
 	cout << endl;
 }
 
+//devolver resultado como cadena para añadir al archivo facilmente
+template<class val> //plantilla de funcion
+string resultado_como_cadena(string categoria, val valor, bool sn){
+	
+	char cat[categoria.length()+1]; //crear arreglo de caracteres con tamaño de la string categoria +1
+	memset(cat,0x0,categoria.length()+1); //inicializa el arreglo con elementos nulos para evitar caracteres basura
+	
+	strcpy(cat,categoria.c_str()); //copia el valor de categoria (String) a cat (arreglo)
+	
+	char respuesta[20]; //crea arreglo para respuesta
+	memset(respuesta,0x0,20); //inicializa el arreglo con elementos nulos para evitar caracteres basura
+	
+	char resultado[50]; //crea arreglo para resultado
+	memset(resultado,0x0,50); //inicializa el arreglo con elementos nulos para evitar caracteres basura
+	
+	strcat(cat,": "); //agrega al arreglo cat el arreglo ": "
+	
+	if(sn){
+		switch(valor){
+			case 0: strcpy(respuesta,"\t\t\tNo"); break; //copia el valor de "\t\t\tNo" al arreglo respuesta
+			case 1: strcpy(respuesta,"\t\t\tSi"); break; //copia el valor de "\t\t\tNo" al arreglo respuesta
+			default: strcpy(respuesta,"\t\t\tNo lo se"); break; //copia el valor de "\t\t\tNo lo se" al arreglo respuesta
+		}
+	}
+	else{
+		strcpy(respuesta,"\t\t"); //copia el valor del arreglo "\t\t" al arreglo respuesta
+		strcat(respuesta,numero_a_cadena(valor).c_str()); //agrega al arreglo respuesta el valor convertido a string que es convertido a arreglo
+		
+	}
+	strcat(resultado,cat); //en teoria: "categoria: "
+	strcat(resultado,respuesta); //en teoria: "categoria: respuesta"
+	
+	string cadena_resultado(resultado); //convierte de arreglo de caracteres (resultado) a clase String (cadena_resultado)
+	
+	return cadena_resultado; //retorna la cadena como clase String
+}
+
 //evaluacion de diagnostico
 void diagnostico(Usuario user){
 	
@@ -234,6 +282,26 @@ void diagnostico(Usuario user){
 				validez_respuesta=true;
 			}
 			else if(respuesta_sn == "S" || respuesta_sn == "s"){
+				
+				//proceso de guardado de resultados de evaluacion a archivo
+				ofstream diag; //creacion de archivo de diagnostico
+				diag.open(archivo_diagnosticos,ios::app); //abrir archivo de diagnostico en modo agregar
+				if(diag.fail()){ //si no puede crearse el archivo
+					cout << "\n\nSe produjo un error al generar el archivo de diagnosticos.";
+					throw exception(); //enviar mensaje de error y cerrar el programa
+				}
+				
+				//se guarda linea por linea cada resultado en formato cadena legible para el usuario
+				diag << resultado_como_cadena("ESTRES",user.reporte.estres,true) << "\n"
+				<< resultado_como_cadena("ARRITMIA",user.reporte.arritmia,true) << "\n"
+				<< resultado_como_cadena("AGOTAMIENTO",user.reporte.agotamiento,true) << "\n"
+				<< resultado_como_cadena("HINCHAZON",user.reporte.hinchazon,true) << "\n"
+				<< resultado_como_cadena("NAUSEAS",user.reporte.nauseas,true) << "\n"
+				<< resultado_como_cadena("INSOMNIO",user.reporte.insomnio,true) << "\n"
+				<< resultado_como_cadena("DOLOR_TORAX",user.reporte.dolor_torax.existe,true) << endl;
+				
+				diag.close(); //se cierra el archivo
+				
 				cout << "\n\n...Guardando Datos...\n\n";
 				linea_divisoria(2);
     			validez_respuesta=true;
@@ -247,7 +315,7 @@ void diagnostico(Usuario user){
 void guardar_datos(Usuario user){
     ofstream registro; //crear un archivo referido por variable registro
     registro.open(ubicacion_registro,ios::app); //abrir archivo en la ubicacion, en modo agregar
-    if(registro.fail()){
+    if(registro.fail()){ //si no puede crearse el archivo
         cout << "\n\nSe produjo un error al crear el archivo de datos.";
         throw exception(); //enviar mensaje de error y terminar el programa.
     }
@@ -263,8 +331,8 @@ void guardar_datos(Usuario user){
 
 //cargar usuario desde el archivo a la estructura
 void cargar_usuario(Usuario& user){
-	ifstream registro;
-	registro.open(ubicacion_registro,ios::in);
+	ifstream registro; //abrir archivo en modo lectura
+	registro.open(ubicacion_registro,ios::in); //abriendo archivo en modo lectura de la ubicacion dada
 	if(registro.fail()){
 		cout << "\n\nSe produjo un error al leer el archivo de datos.";
 		throw exception();
