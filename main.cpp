@@ -40,15 +40,18 @@ struct Usuario{
 
 //tiempo local con formato
 string tiempo_actual(){
-	time_t ahora = time(NULL);
-	tm *ltm = localtime(&ahora);
+	time_t ahora = time(NULL); //obtener el tiempo actual del sistema (segundos desde el 01/01/1900)
+	tm *ltm = localtime(&ahora); //crea la estructura ltm de tipo tm tomando como argumento los segundos
 	
-	char tiempo_en_cadena[30];
-	memset(tiempo_en_cadena,0x0,30);
+	char tiempo_en_cadena[30]; //crea arreglo de caracteres para guardar el tiempo en formato cadena
+	memset(tiempo_en_cadena,0x0,30); //inicializa el arreglo de caracteres para evitar caracteres basura
 	
+	/*funcion de C que permite tomar diferentes valores (ejm numericos) y convertirlos a formato cadena
+	y luego guardarlo en un arreglo de caracteres
+	* ltm -> tm_day // apartado dia de la estructura de tiempo ltm (y asi consecuentemente)*/
 	sprintf(tiempo_en_cadena,"%d/%d/%d",ltm->tm_mday, ltm->tm_mon, ltm->tm_year+1900);
 	
-	return tiempo_en_cadena;
+	return tiempo_en_cadena; //retorna la cadena con la fecha actual del sistema
 }
 
 //linea divisoria de texto
@@ -298,7 +301,7 @@ void diagnostico(Usuario user){
 				
 				//proceso de guardado de resultados de evaluacion a archivo
 				ofstream diag; //creacion de archivo de diagnostico
-				diag.open(archivo_diagnosticos,ios::out); //abrir archivo de diagnostico en modo agregar
+				diag.open(archivo_diagnosticos,ios::app); //abrir archivo de diagnostico en modo agregar
 				if(diag.fail()){ //si no puede crearse el archivo
 					cout << "\n\nSe produjo un error al generar el archivo de diagnosticos.";
 					throw exception(); //enviar mensaje de error y cerrar el programa
@@ -338,18 +341,120 @@ void diagnostico(Usuario user){
 	}
 }
 
-//leer diagnosticos
+//leer diagnosticos desde archivo de diagnosticos
 void leer_diagnosticos(){
 	
-	linea_divisoria(2);
+	bool continuar=true;
 	
 	ifstream diag;
 	diag.open(archivo_diagnosticos,ios::in);
 	if(diag.fail()){
 		cout << "\n\nERROR. NO EXISTE NINGUN ARCHIVO DE DIAGNOSTICO.\n\n";
-		return;
+		//hacer algo que aun no se que es uu
 	}
-	return;
+	
+	string linea_de_texto;
+	
+	int diagnostico_actual = 0;
+		
+	int linea_actual = 0;
+	int lineas_totales = 0;
+		
+	int tamano_diagnostico = 15;
+	int limite_inferior;
+	int limite_superior;
+	
+	bool volver_a_inicio = false;
+	
+	//contar lineas totales en el archivo de diagnostico
+	while(!diag.eof()){
+		lineas_totales++;
+		getline(diag,linea_de_texto);
+	}
+	
+	lineas_totales--; //evitar el salto de linea final
+	
+	//cout << endl << "TOTAL LINEAS: " << lineas_totales << endl;
+	
+	int maximos_diagnosticos = (lineas_totales/tamano_diagnostico)-1;
+	
+	//cout << endl << "MAX DIAG: " << maximos_diagnosticos+1 << endl;
+	
+	int opcion;
+	
+	while(continuar){//parte que se llamara varias veces para ver diferentes diagnosticos (bloques de texto en el archivo)
+	
+		limite_inferior = 1 + (tamano_diagnostico*diagnostico_actual);
+		//cout << endl << "LI: " << limite_inferior << endl;
+		limite_superior = tamano_diagnostico + (tamano_diagnostico*diagnostico_actual);
+		//cout << endl << "LS: " << limite_superior << endl;
+		
+		if(diag.eof() && !volver_a_inicio){
+			diag.clear();
+			diag.seekg(0,ios::beg);
+			linea_actual = 0;
+			volver_a_inicio = true;
+		}
+		
+		while(!diag.eof()){ //leyendo linea por linea el archivo e imprime unicamente las lineas dentro de los limites
+			//cout << endl << "LINEA ACTUAL: " << linea_actual << endl;
+			linea_actual++;
+			getline(diag,linea_de_texto);
+			if(linea_actual >= limite_inferior && linea_actual <= limite_superior){
+				cout << linea_de_texto << endl;
+			}
+		}
+		
+		if(maximos_diagnosticos > 0){
+			
+			if(diagnostico_actual==0){cout << "\n\n \t\t\t\tVER SIGUIENTE[2]->\n\n";}
+			else if(diagnostico_actual==maximos_diagnosticos){cout << "\n\n<-[1]VER ANTERIOR\n\n";}
+			else{cout << "\n\n<-[1]VER ANTERIOR\t\tVER SIGUIENTE[2]->\n\n";}
+			
+			cout << "Salir[3]\n";
+			cout << "Introduzca opcion: ";
+			
+			while(!(cin>>opcion)){
+				cin.clear();
+				cin.ignore(100,'\n');
+				cout << "\n\nOh!Vaya...Te has equivocado. Intentalo nuevamente.\n\n";
+				cout << "Introduzca opcion: ";
+			}
+			
+			switch(opcion){
+				case 1:
+					if(diagnostico_actual==0){
+						cout << "\n\nOh!Vaya...Te has equivocado. Intentalo nuevamente.\n\n";
+						linea_actual = 0;
+						volver_a_inicio = false;
+						break;
+					}
+					diagnostico_actual--;
+					linea_actual = 0;
+					volver_a_inicio = false;
+					break;
+				case 2:
+					if(diagnostico_actual==maximos_diagnosticos){
+						cout << "\n\nOh!Vaya...Te has equivocado. Intentalo nuevamente.\n\n";
+						break;
+					}
+					diagnostico_actual++;
+					linea_actual = 0;
+					volver_a_inicio = false;
+					break;
+				case 3:
+					diag.close();
+					linea_actual = 0;
+					continuar=false;
+					break;
+				default:
+					cout << "\n\nOh!Vaya...Te has equivocado. Intentalo nuevamente.\n\n";
+					linea_actual = 0;
+					volver_a_inicio = false;
+					break;
+			}
+		}
+	}
 }
 
 //guardar datos al archivo
