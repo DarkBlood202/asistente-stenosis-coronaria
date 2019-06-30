@@ -11,7 +11,7 @@ using namespace std;
 char ubicacion_registro[] = "user.txt";
 char archivo_diagnosticos[] = "diag.txt";
 
-//estructura reporte medico
+//subestructura dolor de torax 
 struct Dolor_Torax{
 	bool existe;
 	int intensidad;
@@ -19,6 +19,7 @@ struct Dolor_Torax{
 	bool cede;
 };
 
+//estructura reporte medico
 struct Reporte{
 	Dolor_Torax dolor_torax;
 	bool estres;
@@ -27,7 +28,9 @@ struct Reporte{
 	bool hinchazon;
 	bool nauseas;
 	bool insomnio;
-	int contador;
+	bool sedentarismo;
+	bool tabaquismo;
+	bool antecedentes;
 };
 
 //estructura usuario
@@ -35,6 +38,9 @@ struct Usuario{
     string nombre;
     char sexo[10];
     int edad;
+    float altura;
+    float peso;
+    float imc;
     Reporte reporte;
 };
 
@@ -243,6 +249,61 @@ string resultado_como_cadena(string categoria, val valor, bool sn){
 	return cadena_resultado; //retorna la cadena como clase String
 }
 
+//dar diagnostico conclusion final
+void dar_diagnostico(Usuario user){
+	int contador = user.reporte.estres + user.reporte.arritmia + user.reporte.agotamiento + user.reporte.hinchazon
+	+ user.reporte.nauseas + user.reporte.insomnio + user.reporte.sedentarismo + user.reporte.tabaquismo
+	+ user.reporte.antecedentes + user.reporte.dolor_torax.existe;
+	
+	cout << "Muy bien, aqui tienes tu diagnostico: \n\n";
+	
+	if(contador < 5){
+		cout << "\nCreo que no debes de preocuparte demasiado por eso. Es muy poco probable que\n" <<
+		"padezcas esta enfermedad, pero aun asi no deberias descuidarte.\n";
+	}
+	else if(contador > 10){
+		cout << "\nBueno, bueno. Permiteme explicarte la situacion. Esto ya es un poco mas\n" <<
+		"serio, sabes? Tienes un perfil muy similar al de un paciente de esta enfermedad.\n";
+	}
+	if(user.reporte.dolor_torax.existe){
+		cout << "Respecto a tu dolor toracico, las causas suelen ser variadas. No necesariamente\n" <<
+		"involucra un sintoma muy serio.\n";
+		if(user.reporte.dolor_torax.intensidad<5){
+			cout << "El dolor que sientes, probablemente sea ocasional y no represente mayor\n" <<
+			"importancia. Puede tratarse de mala postura, corrientes frias de aire o incluso\n" <<
+			"mala digestion.\n";
+		}
+		else if(user.reporte.dolor_torax.intensidad==5){
+			cout << "El dolor que sientes, en medida podria ser consecuencia de algun problema\n" <<
+			"en tu cuerpo. En algunos casos puede tratarse de golpes, problemas gastrointestinales" <<
+			"\nmedios, o una minima señal de alerta cardiaca. Te recomiendo que monitorees ese\n" <<
+			"dolor ocasionalmente.\n";
+		}
+		else{
+			cout << "El nivel de dolor que sientes ya puede ser considerado importante y que no\n" <<
+			"deberias pasar por alto. Señales como estas suelen pronosticar enfermedades\n"
+			"serias que deberian ser tratadas dentro de lo inmediato por un especialista.\n";
+		}
+		
+		if(user.reporte.dolor_torax.duracion_min<15){
+			cout << "La percepcion de duracion de tu dolor no es demasiada, no obstante, seria\n"
+			"importante que tomes nota de la frecuencia del mismo, por precaucion.\n";
+		}
+		else{
+			cout << "Tu dolor tiene una duracion moderada. Esto no es necesariamente 'normal'\n" <<
+			"encarecidamente te pido que acudas a un especialista para que pueda explicarte\n" <<
+			"mejor a que se debe esta duracion inusual y el grado de seriedad de la misma.\n";
+		}
+		
+		if(!user.reporte.dolor_torax.cede){
+			cout << "Y ahora que lo mencionas, si este dolor no desaparece como dices, te\n" << 
+			"comento nuevamente (si no lo he comentado aun), que acudas en lo pronto a un\n" <<
+			"centro de salud. Una caracteristica como esa no es especificamente normal.\n" <<
+			"Lo digo en serio.\n";
+		}
+	}
+}
+
 //evaluacion de diagnostico
 void diagnostico(Usuario user){
 	
@@ -260,6 +321,9 @@ void diagnostico(Usuario user){
 		hacer_pregunta("Has notado hinchazon en partes de tu cuerpo?",user.reporte.hinchazon,true);
 		hacer_pregunta("Has sufrido episodios de nausea?",user.reporte.nauseas,true);
 		hacer_pregunta("Presentas dificultad para dormir?",user.reporte.insomnio,true);
+		hacer_pregunta("Llevas un estilo de vida sedentario?",user.reporte.sedentarismo,true);
+		hacer_pregunta("Podrias considerarte fumador?",user.reporte.tabaquismo,true);
+		hacer_pregunta("Ha habido antecedentes de esta enfermedad en ti o tu familia?",user.reporte.antecedentes,true);
 		
 		hacer_pregunta("En algun momento has sentido dolor en la zona superior de tu cuerpo?",user.reporte.dolor_torax.existe,true);
 		if(user.reporte.dolor_torax.existe){
@@ -278,6 +342,10 @@ void diagnostico(Usuario user){
 		mostrar_resultado("HINCHAZON",user.reporte.hinchazon,true);
 		mostrar_resultado("NAUSEAS",user.reporte.nauseas,true);
 		mostrar_resultado("INSOMNIO",user.reporte.insomnio,true);
+		mostrar_resultado("SEDENTARISMO",user.reporte.insomnio,true);
+		mostrar_resultado("TABAQUISMO",user.reporte.insomnio,true);
+		mostrar_resultado("ANTECEDENTES",user.reporte.insomnio,true);
+		
 		mostrar_resultado("DOLOR_TORAX",user.reporte.dolor_torax.existe,true);
 		if(user.reporte.dolor_torax.existe){
 			mostrar_resultado("INTENSIDAD DOLOR",user.reporte.dolor_torax.intensidad,false);
@@ -298,6 +366,8 @@ void diagnostico(Usuario user){
 				validez_respuesta=true;
 			}
 			else if(respuesta_sn == "S" || respuesta_sn == "s"){
+				linea_divisoria(1);
+				dar_diagnostico(user); //lee diagnostico final basado en las respuestas dadas
 				
 				//proceso de guardado de resultados de evaluacion a archivo
 				ofstream diag; //creacion de archivo de diagnostico
@@ -311,6 +381,9 @@ void diagnostico(Usuario user){
 				
 				diag << "======================================================" << "\n"
 				<< "\t\t" << "DIAGNOSTICO DE: " << user.nombre << "\n"
+				<< " SEXO: " << user.sexo << "|EDAD: " << user.edad <<
+				"|ALTURA: " << user.altura << "|PESO: " << user.peso <<
+				"|IMC: " << user.imc << "\n"
 				<< "\t\tgenerado el " << tiempo_actual() << "\n"
 				<< "======================================================" << endl;
 				
@@ -320,12 +393,19 @@ void diagnostico(Usuario user){
 				<< resultado_como_cadena("HINCHAZON",user.reporte.hinchazon,true) << "\n"
 				<< resultado_como_cadena("NAUSEAS",user.reporte.nauseas,true) << "\n"
 				<< resultado_como_cadena("INSOMNIO",user.reporte.insomnio,true) << "\n"
+				<< resultado_como_cadena("SEDENTARISMO",user.reporte.insomnio,true) << "\n"
+				<< resultado_como_cadena("TABAQUISMO",user.reporte.insomnio,true) << "\n"
+				<< resultado_como_cadena("ANTECEDENTES",user.reporte.insomnio,true) << "\n"
+				
 				<< resultado_como_cadena("DOLOR_TORAX",user.reporte.dolor_torax.existe,true) << endl;
 				
 				if(user.reporte.dolor_torax.existe){
 					diag << resultado_como_cadena("INTENSIDAD DOLOR",user.reporte.dolor_torax.intensidad,false) << "\n"
 					<< resultado_como_cadena("DURACION DOLOR(MIN)",user.reporte.dolor_torax.duracion_min,false) << "\n"
 					<< resultado_como_cadena("EL DOLOR CEDE",user.reporte.dolor_torax.cede,true) << endl;
+				}
+				else{
+					diag << "\n\n\n";
 				}
 				
 				diag << "------------------------------------------------------" << endl;
@@ -344,13 +424,16 @@ void diagnostico(Usuario user){
 //leer diagnosticos desde archivo de diagnosticos
 void leer_diagnosticos(){
 	
+	linea_divisoria(2);
+	
 	bool continuar=true;
 	
 	ifstream diag;
 	diag.open(archivo_diagnosticos,ios::in);
 	if(diag.fail()){
-		cout << "\n\nERROR. NO EXISTE NINGUN ARCHIVO DE DIAGNOSTICO.\n\n";
-		//hacer algo que aun no se que es uu
+		cout << "\nERROR. NO EXISTE NINGUN ARCHIVO DE DIAGNOSTICO.\n\n";
+		linea_divisoria(2);
+		return;
 	}
 	
 	string linea_de_texto;
@@ -360,7 +443,7 @@ void leer_diagnosticos(){
 	int linea_actual = 0;
 	int lineas_totales = 0;
 		
-	int tamano_diagnostico = 15;
+	int tamano_diagnostico = 19;
 	int limite_inferior;
 	int limite_superior;
 	
@@ -391,8 +474,8 @@ void leer_diagnosticos(){
 		
 		if(diag.eof() && !volver_a_inicio){
 			diag.clear();
-			diag.seekg(0,ios::beg);
-			linea_actual = 0;
+			diag.seekg(0,ios::beg); //restablecer la posicion de lectura del archivo al inicio del archivo
+			linea_actual = 0; //contador de linea actual
 			volver_a_inicio = true;
 		}
 		
@@ -405,7 +488,31 @@ void leer_diagnosticos(){
 			}
 		}
 		
-		if(maximos_diagnosticos > 0){
+		if(maximos_diagnosticos == 0){ //si solo hay un diagnostico en el archivo de diagnosticos
+			cout << "\nSalir[3]\n";
+			cout << "Introduzca opcion: ";
+			
+			while(!(cin>>opcion)){
+				cin.clear();
+				cin.ignore(100,'\n');
+				cout << "\n\nOh!Vaya...Te has equivocado. Intentalo nuevamente.\n\n";
+				cout << "Introduzca opcion: ";
+			}
+			
+			if(opcion==3){
+				diag.close();
+				linea_actual = 0;
+				continuar=false;
+			}
+			else{
+				cout << "\n\nOh!Vaya...Te has equivocado. Intentalo nuevamente.\n\n";
+				linea_actual = 0;
+				volver_a_inicio = false;
+			}
+			
+		}
+		
+		else if(maximos_diagnosticos > 0){ //si hay mas de un diagnostico en el archivo de diagnosticos
 			
 			if(diagnostico_actual==0){cout << "\n\n \t\t\t\tVER SIGUIENTE[2]->\n\n";}
 			else if(diagnostico_actual==maximos_diagnosticos){cout << "\n\n<-[1]VER ANTERIOR\n\n";}
@@ -455,9 +562,10 @@ void leer_diagnosticos(){
 			}
 		}
 	}
+	linea_divisoria(2);
 }
 
-//guardar datos al archivo
+//guardar datos del usuario al archivo
 void guardar_datos(Usuario user){
     ofstream registro; //crear un archivo referido por variable registro
     registro.open(ubicacion_registro,ios::app); //abrir archivo en la ubicacion, en modo agregar
@@ -468,38 +576,51 @@ void guardar_datos(Usuario user){
     
     registro << user.nombre << "\n"
 	<< user.sexo << "\n"
-	<< user.edad << endl;
+	<< user.edad << "\n"
+	<< user.altura << "\n"
+	<< user.peso << "\n"
+	<< user.imc << endl;
     
     registro.close();
     
     cout << "\n(Se han guardado los datos)\n\n";
 }
 
-//cargar usuario desde el archivo a la estructura
+//cargar datos del usuario desde el archivo a la estructura
 void cargar_usuario(Usuario& user){
 	ifstream registro; //abrir archivo en modo lectura
 	registro.open(ubicacion_registro,ios::in); //abriendo archivo en modo lectura de la ubicacion dada
-	if(registro.fail()){
+	if(registro.fail()){//si por alguna razon el abrir el archivo falla (porque no se encuentra o etc)
 		cout << "\n\nSe produjo un error al leer el archivo de datos.";
-		throw exception();
+		throw exception(); //se lanza error "controlado" y se cierra el programa
 	}
 	
 	getline(registro,user.nombre); //cargando el nombre
 	registro.getline(user.sexo,10,'\n'); //cargando el sexo
 	
-	string cadena_edad; //se define una cadena que tendra el valor de la edad
-	int linea_archivo=0; //se crea un iterador que cuenta las lineas del archivo
-	int linea_edad=3; //linea en el archivo donde se encuentra la edad
+	string cadena_valor; //se define una cadena que tendra el valor del elemento encontrado en el archivo (edad, altura, peso)
+	int linea_archivo; //se crea un iterador que cuenta las lineas del archivo (lectura relativa desde otra linea cualquiera "inicial")
 	
-	//mientras el numero de linea no sea la deseada (en este caso la edad) y exista esa linea en el archivo
-	while(linea_archivo != linea_edad && getline(registro,cadena_edad)){
-		++linea_archivo; //se aumenta el valor de la variable iterativa para pasar de lineas hasta la deseada
-	}
-	if(linea_archivo == linea_edad){
-		//se llega a la linea deseada, pero se lee en formato string, por lo que se convierte a int para guardarlo en la estructura
-		user.edad = atoi(cadena_edad.c_str());
-	}
+	//lineas en el archivo donde se encuentran elementos especificos (edad, altura, peso, imc) en formato cadena
+	int linea_elemento[] = {3,4,5,6};
 	
+	linea_archivo = linea_elemento[0]; //se establece el "origen" de conteo de lineas en el primer elemento del arreglo de arriba
+	
+	for(int i=0; i<4; i++){ //iteramos n veces (siendo n la cantidad de elementos a leer desde nuestra linea "inicial"
+		getline(registro,cadena_valor); //se lee la linea
+		//cout << endl << "VALOR LEIDO en linea "<<linea_elemento[i]<<": "<< cadena_valor << endl;
+		//cout << "LINEA ACTUAL: " << linea_archivo << endl << endl;
+		if(linea_archivo==linea_elemento[i]){ //si el numero de linea en el que estamos coincide con el numero de linea que deseamos
+			switch(linea_archivo){ //cuando la linea en la que estamos es...
+				case 3:	user.edad = atoi(cadena_valor.c_str()); break; //3, se carga la edad
+				case 4:	user.altura = atoi(cadena_valor.c_str()); break; //4, se carga la altura
+				case 5:	user.peso = atoi(cadena_valor.c_str()); break; //5, se carga el peso
+				case 6:	user.imc = atof(cadena_valor.c_str()); break; //6, se carga el imc
+			}
+		}
+		linea_archivo++; //se aumenta el valor de la linea en la que estamos (valor referencial para hacer los calculos)
+	}
+	registro.close(); //se cierra el archivo
 }
 
 //primer uso del programa
@@ -521,10 +642,8 @@ void primer_uso(Usuario usuario){
         
         cout << "Ya veo. Excelente. Eres del sexo " << /*strlwr(*/usuario.sexo/*)*/ << ".\n\n";
 
-        cout << "Por ultimo, " << usuario.nombre << " , cual es tu edad: ";
-        
-        //validacion de numero entero
-        while(!(cin >> usuario.edad)){
+        cout << "Ahora " << usuario.nombre << ", cual es tu edad: ";
+        while(!(cin >> usuario.edad)){ //validacion de tipo de dato numerico
         	cin.clear();
         	cin.ignore(100,'\n');
         	cout << "Uhm... creo que te has confundido, " << usuario.nombre << ".\n";
@@ -533,8 +652,32 @@ void primer_uso(Usuario usuario){
         
         cout << "Oh entiendo. Tienes " << usuario.edad << ".\n\n";
         
-        cout << "Ok. Recapitulemos, te parece?\nEres " << usuario.nombre;
-		cout << ", del sexo " << usuario.sexo << " y tienes " << usuario.edad << " anios de edad.";
+        cout << "Espero que no te moleste darme estos datos. Necesito saber cuanto mides(en cm): ";
+        while(!(cin >> usuario.altura)){ //validacion de tipo de dato numerico
+        	cin.clear();
+        	cin.ignore(100,'\n');
+        	cout << "Uhm... no puedes medir eso, " << usuario.nombre << ".\n";
+        	cout << "Espero que no te moleste darme estos datos. Necesito saber cuanto mides(en cm): ";
+        }
+        
+        cout << "Vaya! Entonces mides " << usuario.altura << " cm.\n\n";
+        
+        cout << "Y por ultimo... perdona si te ofende. Cuanto pesas(en kg): ";
+        while(!(cin >> usuario.peso)){ //validacion de tipo de dato numerico
+        	cin.clear();
+        	cin.ignore(100,'\n');
+        	cout << "Creeme, " << usuario.nombre << ", se que no pesas eso.\n";
+        	cout << "Y por ultimo... perdona si te ofende. Cuanto pesas(en kg): ";
+        }
+        
+        cout << "Perfecto. Pesas unos " << usuario.peso << " kilos entonces.\n\n";
+        
+        usuario.imc = (usuario.peso/((usuario.altura*usuario.altura)/10000));
+        
+        linea_divisoria(1);
+        cout << "Ok. Recapitulemos, te parece?\n\nEres " << usuario.nombre <<
+		", del sexo " << usuario.sexo << ", tienes " << usuario.edad << " anios de edad." <<
+		"\nMides " << usuario.altura << " (en cm), y pesas " << usuario.peso << "kg.\n";
 		
 		//limpiar el buffer
   		fflush(stdin);
@@ -542,8 +685,9 @@ void primer_uso(Usuario usuario){
 		bool validez_respuesta=false;
 		string respuesta_sn;
 		
+		linea_divisoria(1);
 		while(!validez_respuesta){
-			cout << "\n\nSon correctos estos datos? (S/N)\nIngrese su respuesta: ";
+			cout << "\nSon correctos estos datos? (S/N)\nIngrese su respuesta: ";
 			getline(cin,respuesta_sn);
 			if (respuesta_sn == "N" || respuesta_sn == "n"){
 				cout << "\nComprendido. Intentemoslo nuevamente.\n";
@@ -560,6 +704,29 @@ void primer_uso(Usuario usuario){
 	}
 }
 
+//eliminar todos los datos
+void eliminar_todo(){
+	ifstream registro;
+	registro.open(ubicacion_registro,ios::in);
+	
+	ifstream diag;
+	diag.open(archivo_diagnosticos,ios::in);
+	
+	if(registro.fail() || diag.fail()){
+		cout << "\n\nERROR. NO HAY DATOS QUE ELIMINAR. ABORTANDO...\n\n";
+	}
+	else{
+		registro.close();
+		diag.close();
+		
+		remove(ubicacion_registro);
+		remove(archivo_diagnosticos);
+		cout << "\n\nMuy bien. Hemos eliminado TODOS los datos. Ha sido todo un placer, hasta pronto!\n";
+		getchar();
+		return;
+	}
+}
+
 //menu de opciones
 void menu(Usuario usuario){
 	bool confirmar_opcion = false;
@@ -568,6 +735,7 @@ void menu(Usuario usuario){
 	while(!confirmar_opcion){
 		cout << "\n\tMENU PRINCIPAL\n";
 		cout << "1.Informacion.\n2.Iniciar evaluacion de diagnostico.\n3.Revisar previas evaluaciones.\n4.Salir.";
+		cout << "\n\n5.ELIMINAR TODOS LOS DATOS Y SALIR.\n";
 		cout << "\nIngrese opcion: ";
 	
 		while(!(cin>>opcion_menu)){
@@ -589,6 +757,10 @@ void menu(Usuario usuario){
 				break;
 			case 4:
 				confirmar_opcion = true; break;
+			case 5:
+				eliminar_todo();
+				confirmar_opcion = true;
+				break;
 			default:
 				cout << "\n\nUhm... creo que te has equivocado. Intentalo de nuevo.\n\n";
 		}
@@ -605,9 +777,11 @@ int main(int argc, char** argv){
     	primer_uso(usuario);
     	linea_divisoria(2);
     	cargar_usuario(usuario);
+    	registro.close();
     }
     else{
     	cargar_usuario(usuario);
+    	registro.close();
     	cout << "Bienvenid@ de vuelta, " << usuario.nombre << "!\n";
     }
     menu(usuario);
