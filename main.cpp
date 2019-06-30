@@ -752,7 +752,7 @@ void menu(Usuario usuario){
 		cout << "\n\n5.ELIMINAR TODOS LOS DATOS Y SALIR.\n";
 		cout << "\nIngrese opcion: ";
 	
-		while(!(cin>>opcion_menu)){
+		while(!(cin>>opcion_menu)){//validacion de que la opcion ingresada sea un numero
 			cin.clear();
 			cin.ignore(100,'\n');
 			cout << "\n\nUhm... creo que te has equivocado. Intentalo de nuevo.\n\n";
@@ -761,18 +761,18 @@ void menu(Usuario usuario){
 	
 		switch(opcion_menu){
 			case 1:
-				informacion();
+				informacion(); //informacion de la enfermedad
 				break;
 			case 2:
-				diagnostico(usuario);
+				diagnostico(usuario); //inicia diagnostico
 				break;
 			case 3:
-				leer_diagnosticos();
+				leer_diagnosticos(); //leer diagnosticos pasados si existen
 				break;
 			case 4:
-				confirmar_opcion = true; break;
+				confirmar_opcion = true; break; //salir del programa
 			case 5:
-				eliminar_todo();
+				eliminar_todo(); //eliminar todo y salir del programa
 				confirmar_opcion = true;
 				break;
 			default:
@@ -783,22 +783,22 @@ void menu(Usuario usuario){
 
 int main(int argc, char** argv){
     
-    Usuario usuario;
+    Usuario usuario; //se define un usuario
     
-    ifstream registro;
-    registro.open(ubicacion_registro,ios::in);
-    if(registro.fail()){
-    	primer_uso(usuario);
+    ifstream registro; //se abre el archivo registro en modolectura
+    registro.open(ubicacion_registro,ios::in); //se abre el archivo registro en modolectura
+    if(registro.fail()){ //si no puede abrirse o no se encuentra el archivo
+    	primer_uso(usuario); //se llama a la funcion de primer uso de programa (registro usuario)
     	linea_divisoria(2);
-    	cargar_usuario(usuario);
-    	registro.close();
+    	cargar_usuario(usuario); //se cargan los datos del usuario a la estructura
+    	registro.close(); //se cierra el archivo
     }
-    else{
-    	cargar_usuario(usuario);
-    	registro.close();
+    else{ //si se encontro un archivo de datos del usuario
+    	cargar_usuario(usuario); //se cargan los datos del archivo a la estructura
+    	registro.close(); //se cierra el archivo de datos
     	cout << "Bienvenid@ de vuelta, " << usuario.nombre << "!\n";
     }
-    menu(usuario);
+    menu(usuario); //llamada a menu principal
 
     return 0;
 }
