@@ -8,8 +8,8 @@
 using namespace std;
 
 //ubicacion y nombre del archivo
-char ubicacion_registro[] = "user.txt";
-char archivo_diagnosticos[] = "diag.txt";
+char ubicacion_registro[] = "user.dat";
+char archivo_diagnosticos[] = "diag.dat";
 
 //subestructura dolor de torax 
 struct Dolor_Torax{
@@ -318,7 +318,6 @@ string dar_diagnostico(Usuario user){
 
 //evaluacion de diagnostico
 void diagnostico(Usuario user){
-	
 	bool confirmar_datos = false;
 	
 	while(!confirmar_datos){
@@ -616,7 +615,7 @@ void cargar_usuario(Usuario& user){
 	int linea_archivo; //se crea un iterador que cuenta las lineas del archivo (lectura relativa desde otra linea cualquiera "inicial")
 	
 	//lineas en el archivo donde se encuentran elementos especificos (edad, altura, peso, imc) en formato cadena
-	int linea_elemento[] = {3,4,5,6};
+	int linea_elemento[] = {3,4,5,6}; //3ra 4ta 5ta 6ta
 	
 	linea_archivo = linea_elemento[0]; //se establece el "origen" de conteo de lineas en el primer elemento del arreglo de arriba
 	
@@ -634,6 +633,7 @@ void cargar_usuario(Usuario& user){
 		}
 		linea_archivo++; //se aumenta el valor de la linea en la que estamos (valor referencial para hacer los calculos)
 	}
+	
 	registro.close(); //se cierra el archivo
 }
 
@@ -790,7 +790,6 @@ int main(int argc, char** argv){
     if(registro.fail()){ //si no puede abrirse o no se encuentra el archivo
     	primer_uso(usuario); //se llama a la funcion de primer uso de programa (registro usuario)
     	linea_divisoria(2);
-    	cargar_usuario(usuario); //se cargan los datos del usuario a la estructura
     	registro.close(); //se cierra el archivo
     }
     else{ //si se encontro un archivo de datos del usuario
