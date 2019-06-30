@@ -250,58 +250,70 @@ string resultado_como_cadena(string categoria, val valor, bool sn){
 }
 
 //dar diagnostico conclusion final
-void dar_diagnostico(Usuario user){
+string dar_diagnostico(Usuario user){
 	int contador = user.reporte.estres + user.reporte.arritmia + user.reporte.agotamiento + user.reporte.hinchazon
 	+ user.reporte.nauseas + user.reporte.insomnio + user.reporte.sedentarismo + user.reporte.tabaquismo
 	+ user.reporte.antecedentes + user.reporte.dolor_torax.existe;
 	
-	cout << "Muy bien, aqui tienes tu diagnostico: \n\n";
+	char diagnostico_final[1010]; //crea el arreglo donde se guardara el diagnostico final
+	memset(diagnostico_final,0x0,150); //inicializa el arreglo donde se guardara el diagnostico final
+	
+	cout << "Muy bien, aqui tienes tu diagnostico: \n\n\n";
 	
 	if(contador < 5){
-		cout << "\nCreo que no debes de preocuparte demasiado por eso. Es muy poco probable que\n" <<
-		"padezcas esta enfermedad, pero aun asi no deberias descuidarte.\n";
+		strcpy(diagnostico_final,"Creo que no debes de preocuparte demasiado por eso. Es muy poco probable que\n");
+		strcat(diagnostico_final,"padezcas esta enfermedad, pero aun asi no deberias descuidarte.\n");	
+		cout << diagnostico_final;
 	}
 	else if(contador > 10){
-		cout << "\nBueno, bueno. Permiteme explicarte la situacion. Esto ya es un poco mas\n" <<
-		"serio, sabes? Tienes un perfil muy similar al de un paciente de esta enfermedad.\n";
+		strcpy(diagnostico_final,"Bueno, bueno. Permiteme explicarte la situacion. Esto ya es un poco mas\n");
+		strcat(diagnostico_final,"serio, sabes? Tienes un perfil muy similar al de un paciente de esta enfermedad.\n");
 	}
 	if(user.reporte.dolor_torax.existe){
-		cout << "Respecto a tu dolor toracico, las causas suelen ser variadas. No necesariamente\n" <<
-		"involucra un sintoma muy serio.\n";
+		strcat(diagnostico_final,"Respecto a tu dolor toracico, las causas suelen ser variadas. No necesariamente\n");
+		strcat(diagnostico_final,"involucra un sintoma muy serio.\n");
 		if(user.reporte.dolor_torax.intensidad<5){
-			cout << "El dolor que sientes, probablemente sea ocasional y no represente mayor\n" <<
-			"importancia. Puede tratarse de mala postura, corrientes frias de aire o incluso\n" <<
-			"mala digestion.\n";
+			strcat(diagnostico_final,"El dolor que sientes, probablemente sea ocasional y no represente mayor\n");
+			strcat(diagnostico_final,"importancia. Puede tratarse de mala postura, corrientes frias de aire o incluso\n");
+			strcat(diagnostico_final,"mala digestion.\n\n");
 		}
 		else if(user.reporte.dolor_torax.intensidad==5){
-			cout << "El dolor que sientes, en medida podria ser consecuencia de algun problema\n" <<
-			"en tu cuerpo. En algunos casos puede tratarse de golpes, problemas gastrointestinales" <<
-			"\nmedios, o una minima señal de alerta cardiaca. Te recomiendo que monitorees ese\n" <<
-			"dolor ocasionalmente.\n";
+			strcat(diagnostico_final,"El dolor que sientes, en medida podria ser consecuencia de algun problema\n");
+			strcat(diagnostico_final,"en tu cuerpo. En algunos casos puede tratarse de golpes, problemas");
+			strcat(diagnostico_final,"\ngastrointestinales medios, o un minimo signo de alerta cardiaca. Te");
+			strcat(diagnostico_final,"\nrecomiendo que monitorees ese dolor ocasionalmente.\n");
 		}
 		else{
-			cout << "El nivel de dolor que sientes ya puede ser considerado importante y que no\n" <<
-			"deberias pasar por alto. Señales como estas suelen pronosticar enfermedades\n"
-			"serias que deberian ser tratadas dentro de lo inmediato por un especialista.\n";
+			strcat(diagnostico_final,"El nivel de dolor que sientes ya puede ser considerado importante y que no\n");
+			strcat(diagnostico_final,"deberias pasar por alto. Sintomas asi suelen pronosticar enfermedades\n");
+			strcat(diagnostico_final,"serias que deberian ser tratadas dentro de lo inmediato por un especialista.\n\n");
 		}
 		
 		if(user.reporte.dolor_torax.duracion_min<15){
-			cout << "La percepcion de duracion de tu dolor no es demasiada, no obstante, seria\n"
-			"importante que tomes nota de la frecuencia del mismo, por precaucion.\n";
+			strcat(diagnostico_final,"La percepcion de duracion de tu dolor no es demasiada, no obstante, seria\n");
+			strcat(diagnostico_final,"importante que tomes nota de la frecuencia del mismo, por precaucion.\n\n");
 		}
 		else{
-			cout << "Tu dolor tiene una duracion moderada. Esto no es necesariamente 'normal'\n" <<
-			"encarecidamente te pido que acudas a un especialista para que pueda explicarte\n" <<
-			"mejor a que se debe esta duracion inusual y el grado de seriedad de la misma.\n";
+			strcat(diagnostico_final,"Tu dolor tiene una duracion moderada. Esto no es necesariamente 'normal'\n");
+			strcat(diagnostico_final,"encarecidamente te pido que acudas a un especialista para que pueda explicarte\n");
+			strcat(diagnostico_final,"mejor a que se debe esta duracion inusual y el grado de seriedad de la misma.\n");
 		}
 		
 		if(!user.reporte.dolor_torax.cede){
-			cout << "Y ahora que lo mencionas, si este dolor no desaparece como dices, te\n" << 
-			"comento nuevamente (si no lo he comentado aun), que acudas en lo pronto a un\n" <<
-			"centro de salud. Una caracteristica como esa no es especificamente normal.\n" <<
-			"Lo digo en serio.\n";
+			strcat(diagnostico_final,"Y ahora que lo mencionas, si este dolor no desaparece como dices, te\n");
+			strcat(diagnostico_final,"comento nuevamente (si no lo he comentado aun), que acudas en lo pronto a un\n");
+			strcat(diagnostico_final,"centro de salud. Una caracteristica como esa no es especificamente normal.\n");
+			strcat(diagnostico_final,"Lo digo en serio.\n");
+		}
+		else{
+			strcat(diagnostico_final,"\n\n\n\n");
 		}
 	}
+	else{
+		strcat(diagnostico_final,"\n\n\n\n\n\n\n\n\n\n\n");
+	}
+	cout << diagnostico_final;
+	return diagnostico_final;
 }
 
 //evaluacion de diagnostico
@@ -367,7 +379,7 @@ void diagnostico(Usuario user){
 			}
 			else if(respuesta_sn == "S" || respuesta_sn == "s"){
 				linea_divisoria(1);
-				dar_diagnostico(user); //lee diagnostico final basado en las respuestas dadas
+				string diag_final = dar_diagnostico(user); //lee diagnostico final basado en las respuestas dadas y lo guarda en una cadena
 				
 				//proceso de guardado de resultados de evaluacion a archivo
 				ofstream diag; //creacion de archivo de diagnostico
@@ -410,6 +422,8 @@ void diagnostico(Usuario user){
 				
 				diag << "------------------------------------------------------" << endl;
 				
+				diag << diag_final << endl;
+				
 				diag.close(); //se cierra el archivo
 				
 				cout << "\n\n...Guardando Datos...\n\n";
@@ -443,7 +457,7 @@ void leer_diagnosticos(){
 	int linea_actual = 0;
 	int lineas_totales = 0;
 		
-	int tamano_diagnostico = 19;
+	int tamano_diagnostico = 33;
 	int limite_inferior;
 	int limite_superior;
 	
