@@ -90,7 +90,6 @@ void frase_presentar_informacion(){
 
 //informacion sobre stenosis coronaria al usuario
 void informacion(){
-	
 	linea_divisoria(2);
 	
 	int opcion_menu;
@@ -174,16 +173,16 @@ void hacer_pregunta(string pregunta, valor& dato, bool sn){
 			cout << pregunta << endl;
 			if(sn){cout << "1.Si\t2.No\t3.No lo se\n\nTu respuesta: ";}
 		}
-		if(sn){
+		if(sn){//si es una pregunta de si y no
 			switch(opcion){
-				case 1:	dato=true; validez=true; break;
-				case 2: dato=false; validez=true; break;
-				case 3: validez=true; break;
+				case 1:	dato=true; validez=true; break; //si si
+				case 2: dato=false; validez=true; break; //si no
+				case 3: validez=true; break; //si no se
 				default: cout << "\n\nERROR. Por favor introduce una opcion valida.\n\n";
 			}
 		}
-		else{
-			dato = opcion;
+		else{//si es una pregunta que guarda un valor diferente
+			dato = opcion; //se guarda esa respuesta
 			validez = true;
 		}
 	}
@@ -193,15 +192,15 @@ void hacer_pregunta(string pregunta, valor& dato, bool sn){
 template<class val> //plantilla de funcion
 void mostrar_resultado(string categoria, val valor, bool sn){
 	cout << categoria << ": ";
-	if(sn){
+	if(sn){//si es una pregunta de si y no
 		switch(valor){
-			case 0: cout << "\t\t\tNo"; break;
-			case 1: cout << "\t\t\tSi"; break;
-			default: cout << "\t\t\tNo lo se"; break;
+			case 0: cout << "\t\t\tNo"; break; //muestra "no"
+			case 1: cout << "\t\t\tSi"; break; //muestra "si"
+			default: cout << "\t\t\tNo lo se"; break; //muestra "no lo se"
 		}
 	}
-	else{
-		cout << "\t\t" << valor;
+	else{//si es una pregunta diferente de si y no
+		cout << "\t\t" << valor; //muestra el valor
 	}
 	cout << endl;
 }
@@ -253,7 +252,7 @@ string resultado_como_cadena(string categoria, val valor, bool sn){
 string dar_diagnostico(Usuario user){
 	int contador = user.reporte.estres + user.reporte.arritmia + user.reporte.agotamiento + user.reporte.hinchazon
 	+ user.reporte.nauseas + user.reporte.insomnio + user.reporte.sedentarismo + user.reporte.tabaquismo
-	+ user.reporte.antecedentes + user.reporte.dolor_torax.existe;
+	+ user.reporte.antecedentes + user.reporte.dolor_torax.existe; //cuenta cuantos "si" ha dado el usuario
 	
 	char diagnostico_final[1010]; //crea el arreglo donde se guardara el diagnostico final
 	memset(diagnostico_final,0x0,150); //inicializa el arreglo donde se guardara el diagnostico final
@@ -436,68 +435,65 @@ void diagnostico(Usuario user){
 
 //leer diagnosticos desde archivo de diagnosticos
 void leer_diagnosticos(){
-	
 	linea_divisoria(2);
 	
 	bool continuar=true;
 	
-	ifstream diag;
-	diag.open(archivo_diagnosticos,ios::in);
-	if(diag.fail()){
+	ifstream diag; //se abre el archivo
+	diag.open(archivo_diagnosticos,ios::in); //se abre el archivo en modo lectura
+	if(diag.fail()){ //si falla la lectura del archivo
 		cout << "\nERROR. NO EXISTE NINGUN ARCHIVO DE DIAGNOSTICO.\n\n";
 		linea_divisoria(2);
-		return;
+		return;//termina la funcion y vuelve al menu principal
 	}
+	string linea_de_texto; //definimos una cadena linea_de_texto para iterar por linea en el archivo
 	
-	string linea_de_texto;
-	
-	int diagnostico_actual = 0;
+	int diagnostico_actual = 0; //creamos un contador para saber qué diagnostico estamos leyendo
 		
-	int linea_actual = 0;
-	int lineas_totales = 0;
+	int linea_actual = 0; //creamos un contador para saber que linea estamos leyendo del archivo
+	int lineas_totales = 0; //guardamos el numero total de lineas del archivo
 		
-	int tamano_diagnostico = 33;
-	int limite_inferior;
-	int limite_superior;
+	int tamano_diagnostico = 33; //cuanto "mide" cada diagnostico en lineas
+	int limite_inferior; //limite inferior (leer desde)
+	int limite_superior; //limite superior (leer hasta)
 	
-	bool volver_a_inicio = false;
+	bool volver_a_inicio = false; //si el archivo ya ha sido leido, se inicializa para volverlo a leer
 	
 	//contar lineas totales en el archivo de diagnostico
-	while(!diag.eof()){
-		lineas_totales++;
-		getline(diag,linea_de_texto);
+	while(!diag.eof()){ //mientras el archivo se siga leyendo sin haber llegado aun al final
+		lineas_totales++; //aumenta una linea mas al contador de lineas totales
+		getline(diag,linea_de_texto); //lee una linea del archivo diag 
 	}
 	
 	lineas_totales--; //evitar el salto de linea final
 	
-	//cout << endl << "TOTAL LINEAS: " << lineas_totales << endl;
+	//cout << endl << "TOTAL LINEAS: " << lineas_totales << endl; //prueba: saber cuantas lineas se ha encontrado
 	
 	int maximos_diagnosticos = (lineas_totales/tamano_diagnostico)-1;
 	
-	//cout << endl << "MAX DIAG: " << maximos_diagnosticos+1 << endl;
+	//cout << endl << "MAX DIAG: " << maximos_diagnosticos+1 << endl; //prueba: saber cuantos diagnosticos como maximo hay
 	
-	int opcion;
+	int opcion; //opcion para el minimenu de diagnosticos
 	
 	while(continuar){//parte que se llamara varias veces para ver diferentes diagnosticos (bloques de texto en el archivo)
-	
-		limite_inferior = 1 + (tamano_diagnostico*diagnostico_actual);
-		//cout << endl << "LI: " << limite_inferior << endl;
-		limite_superior = tamano_diagnostico + (tamano_diagnostico*diagnostico_actual);
-		//cout << endl << "LS: " << limite_superior << endl;
+		limite_inferior = 1 + (tamano_diagnostico*diagnostico_actual);//el limite inferior cambia de acuerdo al numero de diagnostico actual
+		//cout << endl << "LI: " << limite_inferior << endl; //prueba: conocer el limite inferior actual
+		limite_superior = tamano_diagnostico + (tamano_diagnostico*diagnostico_actual);//el limite superior cambia igual que el inferior
+		//cout << endl << "LS: " << limite_superior << endl; //prueba: conocer el limite superior actual
 		
-		if(diag.eof() && !volver_a_inicio){
-			diag.clear();
+		if(diag.eof() && !volver_a_inicio){//si ya se ha leido del archivo y no se ha inicializado para leerse otra vez
+			diag.clear(); //se "limpia" el estado de "leido" de memoria
 			diag.seekg(0,ios::beg); //restablecer la posicion de lectura del archivo al inicio del archivo
 			linea_actual = 0; //contador de linea actual
-			volver_a_inicio = true;
+			volver_a_inicio = true; //como ya se ha leido, para que solo se inicialize una vez;
 		}
 		
 		while(!diag.eof()){ //leyendo linea por linea el archivo e imprime unicamente las lineas dentro de los limites
-			//cout << endl << "LINEA ACTUAL: " << linea_actual << endl;
-			linea_actual++;
-			getline(diag,linea_de_texto);
-			if(linea_actual >= limite_inferior && linea_actual <= limite_superior){
-				cout << linea_de_texto << endl;
+			//cout << endl << "LINEA ACTUAL: " << linea_actual << endl; //prueba: saber que linea estamos leyendo ahora
+			linea_actual++; //aumenta una linea mas al numero de linea en el que estamos (para tener la referencia de la linea leida)
+			getline(diag,linea_de_texto); //lee una linea del archivo
+			if(linea_actual >= limite_inferior && linea_actual <= limite_superior){ //si estamos leyendo una linea dentro de los limites
+				cout << linea_de_texto << endl; //se imprime esa linea al usuario
 			}
 		}
 		
@@ -505,36 +501,35 @@ void leer_diagnosticos(){
 			cout << "\nSalir[3]\n";
 			cout << "Introduzca opcion: ";
 			
-			while(!(cin>>opcion)){
+			while(!(cin>>opcion)){//validacion de tipo de dato numerico
 				cin.clear();
 				cin.ignore(100,'\n');
 				cout << "\n\nOh!Vaya...Te has equivocado. Intentalo nuevamente.\n\n";
 				cout << "Introduzca opcion: ";
 			}
 			
-			if(opcion==3){
-				diag.close();
-				linea_actual = 0;
-				continuar=false;
+			if(opcion==3){//si elegimos la opcion de salir
+				diag.close(); //cerramos el archivo
+				linea_actual = 0; //la linea actual regresa a 0
+				continuar=false; //se termina el proceso
 			}
 			else{
 				cout << "\n\nOh!Vaya...Te has equivocado. Intentalo nuevamente.\n\n";
-				linea_actual = 0;
-				volver_a_inicio = false;
+				linea_actual = 0; //la linea actual regresa a 0
+				volver_a_inicio = false; //se vuelve a inicializar para leer nuevamente
 			}
 			
 		}
-		
 		else if(maximos_diagnosticos > 0){ //si hay mas de un diagnostico en el archivo de diagnosticos
 			
-			if(diagnostico_actual==0){cout << "\n\n \t\t\t\tVER SIGUIENTE[2]->\n\n";}
-			else if(diagnostico_actual==maximos_diagnosticos){cout << "\n\n<-[1]VER ANTERIOR\n\n";}
-			else{cout << "\n\n<-[1]VER ANTERIOR\t\tVER SIGUIENTE[2]->\n\n";}
+			if(diagnostico_actual==0){cout << "\n\n \t\t\t\tVER SIGUIENTE[2]->\n\n";}//si estamos en el primer diagnostico
+			else if(diagnostico_actual==maximos_diagnosticos){cout << "\n\n<-[1]VER ANTERIOR\n\n";}//si estamos en el ultimo diagnostico
+			else{cout << "\n\n<-[1]VER ANTERIOR\t\tVER SIGUIENTE[2]->\n\n";}//posicion de diagnostico intermedio
 			
 			cout << "Salir[3]\n";
 			cout << "Introduzca opcion: ";
 			
-			while(!(cin>>opcion)){
+			while(!(cin>>opcion)){//validacion de tipo de dato numerico
 				cin.clear();
 				cin.ignore(100,'\n');
 				cout << "\n\nOh!Vaya...Te has equivocado. Intentalo nuevamente.\n\n";
@@ -545,13 +540,13 @@ void leer_diagnosticos(){
 				case 1:
 					if(diagnostico_actual==0){
 						cout << "\n\nOh!Vaya...Te has equivocado. Intentalo nuevamente.\n\n";
-						linea_actual = 0;
-						volver_a_inicio = false;
+						linea_actual = 0; //la linea actual regresa a 0
+						volver_a_inicio = false; //se vuelve a inicializar para leer nuevamente
 						break;
 					}
 					diagnostico_actual--;
-					linea_actual = 0;
-					volver_a_inicio = false;
+					linea_actual = 0; //la linea actual regresa a 0
+					volver_a_inicio = false; //se vuelve a inicializar para leer nuevamente
 					break;
 				case 2:
 					if(diagnostico_actual==maximos_diagnosticos){
@@ -559,18 +554,18 @@ void leer_diagnosticos(){
 						break;
 					}
 					diagnostico_actual++;
-					linea_actual = 0;
-					volver_a_inicio = false;
+					linea_actual = 0; //la linea actual regresa a 0
+					volver_a_inicio = false; //se vuelve a inicializar para leer nuevamente
 					break;
 				case 3:
 					diag.close();
-					linea_actual = 0;
-					continuar=false;
+					linea_actual = 0; //la linea actual regresa a 0
+					continuar=false; //se vuelve a inicializar para leer nuevamente
 					break;
 				default:
 					cout << "\n\nOh!Vaya...Te has equivocado. Intentalo nuevamente.\n\n";
-					linea_actual = 0;
-					volver_a_inicio = false;
+					linea_actual = 0; //la linea actual regresa a 0
+					volver_a_inicio = false; //se vuelve a inicializar para leer nuevamente
 					break;
 			}
 		}
@@ -782,7 +777,6 @@ void menu(Usuario usuario){
 }
 
 int main(int argc, char** argv){
-    
     Usuario usuario; //se define un usuario
     
     ifstream registro; //se abre el archivo registro en modolectura
@@ -790,6 +784,7 @@ int main(int argc, char** argv){
     if(registro.fail()){ //si no puede abrirse o no se encuentra el archivo
     	primer_uso(usuario); //se llama a la funcion de primer uso de programa (registro usuario)
     	linea_divisoria(2);
+    	cargar_usuario(usuario);
     	registro.close(); //se cierra el archivo
     }
     else{ //si se encontro un archivo de datos del usuario
