@@ -1,11 +1,3 @@
-/*BUEN DIA(TARDE/NOCHE), profesor Cabrera, muchas gracias por dedicar su tiempo a revisar mi proyecto.
-Como podra notar, es un archivo adicional al proyecto principal que he presentado con mi grupo del curso.
-La razon es la de que me gustaria pedirle (disculpando las molestias) consejo, orientacion y una opinion
-respecto a este proyecto "personal" que he intentado realizar. Se trata de un "mini-asistente" que ayuda
-en base a unas preguntas determinar si el usuario padece o no de una enfermedad cardiaca.
-Nuevamente pido disculpas al caso y espero pueda apoyarme con su consejo, se lo agradecere mucho.
-Atentamente, Sebastian Hidalgo.*/
-
 #include<iostream> //entrada y salida estandar de c++
 #include<string.h> //manejo de cadenas
 #include<fstream> //manejo de archivos
