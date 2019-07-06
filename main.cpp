@@ -1,3 +1,11 @@
+/*BUEN DIA(TARDE/NOCHE), profesor Cabrera, muchas gracias por dedicar su tiempo a revisar mi proyecto.
+Como podra notar, es un archivo adicional al proyecto principal que he presentado con mi grupo del curso.
+La razon es la de que me gustaria pedirle (disculpando las molestias) consejo, orientacion y una opinion
+respecto a este proyecto "personal" que he intentado realizar. Se trata de un "mini-asistente" que ayuda
+en base a unas preguntas determinar si el usuario padece o no de una enfermedad cardiaca.
+Nuevamente pido disculpas al caso y espero pueda apoyarme con su consejo, se lo agradecere mucho.
+Atentamente, Sebastian Hidalgo.*/
+
 #include<iostream> //entrada y salida estandar de c++
 #include<string.h> //manejo de cadenas
 #include<fstream> //manejo de archivos
@@ -84,7 +92,7 @@ void frase_presentar_informacion(){
 		case 6:	cout << "\nAqui tiene la informacion recolectada:\n"; break;
 		case 7:	cout << "\nAqui te muestro lo que tengo a mi disposicion.\n"; break;
 		case 8:	cout << "\nProcedo a mostrarle la informacion:\n"; break;
-		case 9:	cout << "\nMira lo que te traigooo (-w-)/ !!!:\n"; break;
+		case 9:	cout << "\nTengo esto para ti:\n"; break;
 	}
 }
 
@@ -209,7 +217,7 @@ void mostrar_resultado(string categoria, val valor, bool sn){
 template<class val> //plantilla de funcion
 string resultado_como_cadena(string categoria, val valor, bool sn){
 	
-	char cat[categoria.length()+1]; //crear arreglo de caracteres con tama�o de la string categoria +1
+	char cat[categoria.length()+1]; //crear arreglo de caracteres con tamaï¿½o de la string categoria +1
 	memset(cat,0x0,categoria.length()+1); //inicializa el arreglo con elementos nulos para evitar caracteres basura
 	
 	strcpy(cat,categoria.c_str()); //copia el valor de categoria (String) a cat (arreglo)
@@ -448,7 +456,7 @@ void leer_diagnosticos(){
 	}
 	string linea_de_texto; //definimos una cadena linea_de_texto para iterar por linea en el archivo
 	
-	int diagnostico_actual = 0; //creamos un contador para saber qu� diagnostico estamos leyendo
+	int diagnostico_actual = 0; //creamos un contador para saber qué diagnostico estamos leyendo
 		
 	int linea_actual = 0; //creamos un contador para saber que linea estamos leyendo del archivo
 	int lineas_totales = 0; //guardamos el numero total de lineas del archivo
@@ -633,7 +641,7 @@ void cargar_usuario(Usuario& user){
 }
 
 //primer uso del programa
-void primer_uso(Usuario usuario){
+void registrar_usuario(Usuario usuario){
 	bool confirmar_datos = false;
 
 	cout << "Bienvenid@ a su sistema de asistencia en salud." << "\n\nVeo que es un usuario nuevo. Por favor, cuentame un poco sobre ti." << endl;
@@ -659,7 +667,8 @@ void primer_uso(Usuario usuario){
         	cout << "Por ultimo, " << usuario.nombre << " , cual es tu edad: ";
         }
         
-        cout << "Oh entiendo. Tienes " << usuario.edad << ".\n\n";
+        if(usuario.edad<5){cout<<"Me sorprende mucho cuan joven eres.\n";}
+        cout << "Entiendo. Tienes " << usuario.edad << " anios.\n\n";
         
         cout << "Espero que no te moleste darme estos datos. Necesito saber cuanto mides(en cm): ";
         while(!(cin >> usuario.altura)){ //validacion de tipo de dato numerico
@@ -721,7 +730,7 @@ void eliminar_todo(){
 	ifstream diag;
 	diag.open(archivo_diagnosticos,ios::in);
 	
-	if(registro.fail() || diag.fail()){
+	if(registro.fail() && diag.fail()){
 		cout << "\n\nERROR. NO HAY DATOS QUE ELIMINAR. ABORTANDO...\n\n";
 	}
 	else{
@@ -734,6 +743,25 @@ void eliminar_todo(){
 		getchar();
 		return;
 	}
+}
+
+//muestra la "pantalla de bienvenida"
+void pantalla_inicial(){
+	cout << 
+			" \t   _   ___ ___ ___ _____ ___ _  _ _____ ___"  << endl <<
+			" \t  /_\\ / __|_ _/ __|_   _| __| \\| |_   _| __|" << endl <<
+			" \t / _ \\\\__ \\| |\\__ \\ | | | _|| .` | | | | _|" << endl <<
+			" \t/_/ \\_\\___/___|___/ |_| |___|_|\\_| |_| |___|" << endl <<
+			" \t\t\t ___  ___" << endl <<
+			" \t\t\t|   \\| __|" << endl <<
+			" \t\t\t| |) | _|" << endl <<
+			" \t\t\t|___/|___|" << endl <<
+			" \t\t ___   _   _   _   _ ___" << endl <<
+			" \t\t/ __| /_\\ | | | | | |   \\" << endl <<
+			" \t\t\\__ \\/ _ \\| |_| |_| | |) |" << endl <<
+			" \t\t|___/_/ \\_\\____\\___/|___/" << endl <<
+			"\n\n\n\n\t     <<Pulse ENTER para continuar>>\n";
+	getchar();
 }
 
 //menu de opciones
@@ -777,22 +805,25 @@ void menu(Usuario usuario){
 }
 
 int main(int argc, char** argv){
-    Usuario usuario; //se define un usuario
-    
-    ifstream registro; //se abre el archivo registro en modolectura
-    registro.open(ubicacion_registro,ios::in); //se abre el archivo registro en modolectura
-    if(registro.fail()){ //si no puede abrirse o no se encuentra el archivo
-    	primer_uso(usuario); //se llama a la funcion de primer uso de programa (registro usuario)
-    	linea_divisoria(2);
-    	cargar_usuario(usuario);
-    	registro.close(); //se cierra el archivo
-    }
-    else{ //si se encontro un archivo de datos del usuario
-    	cargar_usuario(usuario); //se cargan los datos del archivo a la estructura
-    	registro.close(); //se cierra el archivo de datos
-    	cout << "Bienvenid@ de vuelta, " << usuario.nombre << "!\n";
-    }
-    menu(usuario); //llamada a menu principal
+	pantalla_inicial();
 
+	linea_divisoria(2);
+
+	Usuario usuario; //se define un usuario
+
+	ifstream registro; //se abre el archivo registro en modolectura
+	registro.open(ubicacion_registro,ios::in); //se abre el archivo registro en modolectura
+	if(registro.fail()){ //si no puede abrirse o no se encuentra el archivo
+		registrar_usuario(usuario); //se llama a la funcion de primer uso de programa (registro usuario)
+		linea_divisoria(2);
+		cargar_usuario(usuario);
+		registro.close(); //se cierra el archivo
+	}
+	else{ //si se encontro un archivo de datos del usuario
+		cargar_usuario(usuario); //se cargan los datos del archivo a la estructura
+		registro.close(); //se cierra el archivo de datos
+		cout << "Bienvenid@ de vuelta, " << usuario.nombre << "!\n";
+	}
+	menu(usuario); //llamada a menu principal
     return 0;
 }
